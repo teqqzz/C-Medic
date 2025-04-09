@@ -8,15 +8,14 @@ POST {{ClinicaMedica_HostAddress}}/ClinicaMedica/Paciente/Cadastrar
 Content-Type: application/json
 
 {
-  "name": "João da Silva",
+  "name": "Paciente Da Silva",
   "birthday": "1990-05-15",
-  "email": "joao.silva@example.com",
+  "email": "paciente@email.com",
   "phone": "(11) 91234-5678",
   "cpf": "12345678900",
-  "adress": "Rua das Flores, 123 - Centro, São Paulo - SP",
+  "adress": "Rua",
   "weight": 78.5,
   "height": 1.75,
-  "criadoEm": "2025-04-07T10:00:00",
   "criadopor": "Sistema"
 }
 
@@ -27,3 +26,24 @@ Accept: application/json
 ### Listar Paciente Por ID
 GET http://localhost:5223/ClinicaMedica/Paciente/ListarId/1
 Accept: application/json
+
+### Atualizar Paciente Por ID
+PUT {{ClinicaMedica_HostAddress}}/ClinicaMedica/Paciente/Atualizar
+Content-Type: application/json
+
+{
+  "id": 3,
+  "name": "Paciente Atualizado Da Silva",
+  "birthday": "1990-05-15",
+  "email": "paciente@email.com",
+  "phone": "(11) 98765-4321",
+  "cpf": "12345678900",
+  "adress": "Rua Atualizada",
+  "weight": 80.0,
+  "height": 1.78,
+  "criadoEm": "2025-04-07T10:00:00",
+  "criadopor": "Sistema"
+}
+
+### Deletar Paciente Por ID
+DELETE http://localhost:5223/ClinicaMedica/Paciente/Deletar/4

@@ -32,7 +32,10 @@ namespace ClinicaMedica.Controllers;
         [HttpGet("Listar")]
         public IActionResult GetPacientes(){
             var pacientes = _paciente.ListarPacientes();
-            return Ok(pacientes);
+            return Ok(new {
+                mensagem = "Pacientes Encontrados: ",
+                pacientes = pacientes
+            });
         }
 
         //Endpoint GET Verificar Paciente pelo ID
@@ -45,6 +48,39 @@ namespace ClinicaMedica.Controllers;
 
             return Ok(paciente);
             }
-            
-}
+
+         //Endpoint Put Verificar Paciente pelo ID
+        [HttpPut("Atualizar")]
+        public IActionResult AtualizarPaciente([FromBody]Paciente paciente){
+            try{
+            var pacienteAtualizado = _paciente.AtualizarPacientePorId(paciente.Id, paciente);
+            if (pacienteAtualizado == null){
+                return NotFound("Paciente não encontrado.");
+            }
+
+                return Ok(new {
+                mensagem = "Paciente Atualizado: ",
+                pacienteAtualizado = pacienteAtualizado
+                });
+            }
+            catch(Exception ex){
+            return BadRequest($"Erro ao atualizar: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("Deletar/{id}")]
+        public IActionResult DeletarPacientePorId(int id){
+            var pacienteDeletado = _paciente.DeletarPacientePorId(id);
+            if (pacienteDeletado == null){
+                return NotFound("Paciente não encontrado.");
+            }
+
+            return Ok(new {
+                mensagem = "Paciente deletado: ",
+                paciente = pacienteDeletado
+            });
+        }
+        
+    }    
+
     
