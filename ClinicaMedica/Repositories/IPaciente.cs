@@ -10,5 +10,6 @@ namespace ClinicaMedica.Repositories
     {
         void CadastrarPacientes(Paciente paciente);
         List<Paciente> ListarPacientes();
+        Paciente ListarPacientePorId(int id);
     }
 }

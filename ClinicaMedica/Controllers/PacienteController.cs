@@ -35,4 +35,16 @@ namespace ClinicaMedica.Controllers;
             return Ok(pacientes);
         }
 
-    }
+        //Endpoint GET Verificar Paciente pelo ID
+        [HttpGet("ListarId/{id}")]
+        public IActionResult GetPacienteId(int id){
+            var paciente = _paciente.ListarPacientePorId(id);
+            if (paciente == null){
+                return NotFound("Paciente não encontrado.");
+            }
+
+            return Ok(paciente);
+            }
+            
+}
+    

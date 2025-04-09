@@ -22,5 +22,15 @@ namespace ClinicaMedica.Repositories
         public List<Paciente> ListarPacientes(){
             return _context.Pacientes.ToList();
         }
+
+        public Paciente ListarPacientePorId(int id){
+            var paciente = _context.Pacientes.FirstOrDefault(p => p.Id == id);
+
+            if (paciente == null){
+                throw new Exception("Paciente não encontrado");
+            }
+
+            return paciente;
+        }
     }
 }

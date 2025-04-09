@@ -3,10 +3,6 @@
 GET {{ClinicaMedica_HostAddress}}/weatherforecast/
 Accept: application/json
 
-### Listar Pacientes
-GET {{ClinicaMedica_HostAddress}}/ClinicaMedica/Paciente/Listar
-Accept: application/json
-
 ### Cadastrar Paciente
 POST {{ClinicaMedica_HostAddress}}/ClinicaMedica/Paciente/Cadastrar
 Content-Type: application/json
@@ -23,3 +19,11 @@ Content-Type: application/json
   "criadoEm": "2025-04-07T10:00:00",
   "criadopor": "Sistema"
 }
+
+### Listar Pacientes
+GET {{ClinicaMedica_HostAddress}}/ClinicaMedica/Paciente/Listar
+Accept: application/json
+
+### Listar Paciente Por ID
+GET http://localhost:5223/ClinicaMedica/Paciente/ListarId/1
+Accept: application/json
