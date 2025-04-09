@@ -9,7 +9,8 @@ namespace ClinicaMedica.Data
         public string Birthday { get; set;}= string.Empty;
         public string Email { get; set;}= string.Empty;
         public string Phone { get; set;}= string.Empty;
-        public int CPF { get; set;}= int.MaxValue;
+        public string CPF { get; set;}= string.Empty;
+        public string Adress { get; set;}= string.Empty;
         public double Weight { get; set;}= double.MaxValue;
         public double Height { get; set;}= double.MaxValue;
         public DateTime CriadoEm { get; set; } = DateTime.Now;

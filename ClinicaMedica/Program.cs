@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ClinicaMedica.Data;
+using ClinicaMedica.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ var connectionString = builder.
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddScoped<IPaciente, PacienteRepository>();
 
 
 var app = builder.Build();

@@ -3,4 +3,23 @@
 GET {{ClinicaMedica_HostAddress}}/weatherforecast/
 Accept: application/json
 
-###
+### Listar Pacientes
+GET {{ClinicaMedica_HostAddress}}/ClinicaMedica/Paciente/Listar
+Accept: application/json
+
+### Cadastrar Paciente
+POST {{ClinicaMedica_HostAddress}}/ClinicaMedica/Paciente/Cadastrar
+Content-Type: application/json
+
+{
+  "name": "João da Silva",
+  "birthday": "1990-05-15",
+  "email": "joao.silva@example.com",
+  "phone": "(11) 91234-5678",
+  "cpf": "12345678900",
+  "adress": "Rua das Flores, 123 - Centro, São Paulo - SP",
+  "weight": 78.5,
+  "height": 1.75,
+  "criadoEm": "2025-04-07T10:00:00",
+  "criadopor": "Sistema"
+}
