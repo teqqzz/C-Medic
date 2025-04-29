@@ -1,0 +1,31 @@
+### Listar todos os pacientes
+GET http://localhost:3000/pacientes
+
+### Criar novo paciente
+POST http://localhost:3000/pacientes
+Content-Type: application/json
+
+{
+  "nome": "Lucas Teste",
+  "datanascimento": 20020919,
+  "email": "lucas@email.com",
+  "cpf": "12345678900",
+  "endereco": "Rua XPTO, 456",
+  "criadoPor": "Admin"
+}
+
+### Atualizar um paciente existente
+PUT http://localhost:3000/pacientes/1
+Content-Type: application/json
+
+{
+  "nome": "Lucas Teste Atualizado",
+  "datanascimento": 20020919,
+  "email": "lucas.updated@email.com",
+  "cpf": "12345678900",
+  "endereco": "Rua XPTO, 456 Atualizada",
+  "criadoPor": "Admin"
+}
+
+### Deletar um paciente
+DELETE http://localhost:3000/pacientes/2
