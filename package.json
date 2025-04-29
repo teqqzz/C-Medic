@@ -1,0 +1,28 @@
+{
+  "name": "c-medic",
+  "version": "1.0.0",
+  "description": "**C-Medic** é um sistema de gestão para clínicas médicas e consultórios, desenvolvido em **Node.js**, com foco na automação e organização dos processos administrativos, clínicos e financeiros.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teqqzz/C-Medic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teqqzz/C-Medic/issues"
+  },
+  "homepage": "https://github.com/teqqzz/C-Medic#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.14.1",
+    "mongoose-auto-increment": "^5.0.1",
+    "mongoose-sequence": "^6.0.1",
+    "mysql2": "^3.14.1"
+  }
+}
