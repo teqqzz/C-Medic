@@ -1,6 +1,11 @@
 const express = require('express');
+<<<<<<< HEAD
 const mongoose = require('./config/database');
 const pacienteRoutes = require('./routes/pacienteRoutes'); // Importando as rotas do paciente
+=======
+const mongoose = require('./src/config/database');
+const pacienteRoutes = require('./src/routes/pacienteRoutes'); // Importando as rotas do paciente
+>>>>>>> 1fb3f43 (teste)
 
 const app = express();
 const PORT = process.env.PORT || 3000;
