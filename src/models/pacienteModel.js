@@ -1,4 +1,4 @@
-const mongoose = require('../src/config/database');
+const mongoose = require('../config/database');
 const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 // Definir o esquema do paciente

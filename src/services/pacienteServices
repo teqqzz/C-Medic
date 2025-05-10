@@ -1,4 +1,4 @@
-const Paciente = require('../src/models/pacienteModel');
+const Paciente = require('../models/pacienteModel');
 
 // Função para listar todos os pacientes
 const listarPacientes = () => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pacienteController = require('../src/controllers/pacienteController');
+const pacienteController = require('../controllers/pacienteController');
 
 // Rota para listar todos os pacientes
 router.get('/', pacienteController.listarPacientes);

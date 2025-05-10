@@ -1,4 +1,4 @@
-const Paciente = require('../src/models/pacienteModel');  // Importando o modelo de paciente
+const Paciente = require('../models/pacienteModel');  // Importando o modelo de paciente
 
 // Função para listar todos os pacientes
 const listarPacientes = async (req, res) => {
