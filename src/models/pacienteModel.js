@@ -13,7 +13,7 @@ const pacienteSchema = new mongoose.Schema({
 });
 
 // Usar o mongoose-sequence para auto incrementar o campo 'id'
-pacienteSchema.plugin(mongooseSequence, { inc_field: 'id' });
+pacienteSchema.plugin(mongooseSequence, { inc_field: 'pacienteid' });
 
 // Criar o modelo baseado no esquema
 const Paciente = mongoose.model('Paciente', pacienteSchema);

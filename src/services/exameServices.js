@@ -11,4 +11,18 @@ const criarExame = (exameData) => {
   return exame.save();
 };
 
-module.exports = { listarExames, criarExame };
+// Atualizar um exame existente
+const atualizarExame = (exameid, dadosAtualizados) => {
+  return Exame.findOneAndUpdate(
+    { exameid },
+    dadosAtualizados,
+    { new: true }
+  );
+};
+
+// Deletar um exame
+const deletarExame = (exameid) => {
+  return Exame.findOneAndDelete({ exameid });
+};
+
+module.exports = { listarExames, criarExame, atualizarExame, deletarExame };

@@ -11,4 +11,18 @@ const criarPaciente = (pacienteData) => {
   return paciente.save();
 };
 
-module.exports = { listarPacientes, criarPaciente };
+// Atualizar um exame existente
+const atualizarPaciente = (pacienteid, dadosAtualizados) => {
+  return Paciente.findOneAndUpdate(
+    { exameid },
+    dadosAtualizados,
+    { new: true }
+  );
+};
+
+// Deletar um exame
+const deletarPaciente = (id) => {
+  return Paciente.findOneAndDelete({ pacienteid });
+};
+
+module.exports = { listarPacientes, criarPaciente, atualizarPaciente, deletarPaciente };

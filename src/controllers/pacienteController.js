@@ -33,12 +33,12 @@ const criarPaciente = async (req, res) => {
 // Função para atualizar um paciente
 const atualizarPaciente = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { pacienteid } = req.params;
     const { nome, datanascimento, email, cpf, endereco, criadoPor } = req.body;
 
     // Atualiza o paciente pelo ID
     const pacienteAtualizado = await Paciente.findOneAndUpdate(
-      { id },
+      { pacienteid },
       { nome, datanascimento, email, cpf, endereco, criadoPor },
       { new: true }
     );
@@ -56,10 +56,10 @@ const atualizarPaciente = async (req, res) => {
 // Função para deletar um paciente
 const deletarPaciente = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { pacienteid } = req.params;
 
     // Deleta o paciente pelo ID
-    const pacienteDeletado = await Paciente.findOneAndDelete({ id });
+    const pacienteDeletado = await Paciente.findOneAndDelete({ pacienteid });
 
     if (!pacienteDeletado) {
       return res.status(404).json({ mensagem: 'Paciente não encontrado' });
