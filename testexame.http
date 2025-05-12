@@ -1,5 +1,5 @@
 ### Listar todos os pacientes
-GET http://localhost:3000/pacientes/listarexame
+GET http://localhost:3000/exames/listarexame
 
 ### Criar novo paciente
 POST http://localhost:3000/exames/criarexame
