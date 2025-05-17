@@ -12,25 +12,13 @@
 
 - **Processo de vendas**
   - Agendamento de consultas.
-  - Emissão de guias de convênio.
 
-- **Carrinho de compras**
-  - Seleção de exames e procedimentos pelo paciente antes da confirmação da consulta.
 
 - **Máquina de estados para vendas**
   - Controle de status da consulta: `Agendada`, `Realizada`, `Cancelada`.
 
 - **Gestão de contas a pagar**
   - Pagamentos de médicos, fornecedores e despesas operacionais.
-
-- **Gestão de contas a receber**
-  - Faturamento de consultas particulares e convênios.
-
-- **Gestão de funcionários**
-  - Administração de médicos, recepcionistas, técnicos e demais colaboradores.
-
-- **Relatórios de contabilidade**
-  - Relatórios de faturamento, desempenho e análise de custos.
 
 ## ✅ Requisitos Funcionais
 
