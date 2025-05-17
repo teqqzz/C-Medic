@@ -14,9 +14,9 @@ router.get('/listarpaciente', listarPacientesController);
 router.post('/criarpaciente', criarPacienteController);
 
 // Rota para atualizar um paciente existente
-router.put('/atualizarpaciente/:pacienteid', atualizarPacienteController);
+router.put('/atualizarpaciente/:id', atualizarPacienteController);
 
 // Rota para excluir um paciente
-router.delete('/deletarpaciente/:pacienteid', deletarPacienteController);
+router.delete('/deletarpaciente/:id', deletarPacienteController);
 
 module.exports = router;

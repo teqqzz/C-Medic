@@ -1,8 +1,7 @@
 const Exame = require('../../models/exameModel');
 
-const criarExameServices = (exameData) => {
-  const novoExame = new Exame(exameData);
-  return novoExame.save(); 
+const criarExameServices = async (exameData) => {
+  return await Exame.create(exameData);
 };
 
 module.exports = criarExameServices;

@@ -1,21 +1,20 @@
-const mongoose = require('../config/database');
-const mongooseSequence = require('mongoose-sequence')(mongoose);
-
-// Definir o esquema do paciente
-const pacienteSchema = new mongoose.Schema({
-  nome: { type: String, required: true },
-  datanascimento: { type: Number, required: true },
-  email: { type: String, required: true },
-  cpf: { type: String, required: true },
-  endereco: { type: String, required: true },
-  criadoEm: { type: Date, default: Date.now },
-  criadoPor: { type: String, required: true }
+const { DataTypes } = require('sequelize');
+const { database } = require('../config/database'); 
+const Paciente = database.define('Paciente', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  nome: DataTypes.STRING,
+  datanascimento: DataTypes.DATEONLY,
+  email: DataTypes.STRING,
+  cpf: DataTypes.STRING,
+  endereco: DataTypes.STRING,
+  criadoPor: DataTypes.STRING,
+}, {
+  tableName: 'pacientes',
+  timestamps: false,
 });
-
-// Usar o mongoose-sequence para auto incrementar o campo 'id'
-pacienteSchema.plugin(mongooseSequence, { inc_field: 'pacienteid' });
-
-// Criar o modelo baseado no esquema
-const Paciente = mongoose.model('Paciente', pacienteSchema);
 
 module.exports = Paciente;

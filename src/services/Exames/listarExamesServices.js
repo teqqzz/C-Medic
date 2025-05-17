@@ -1,7 +1,7 @@
 const Exame = require('../../models/exameModel');
 
-const listarExamesServices = () => {
-  return Exame.find();
+const listarExamesServices = async () => {
+  return await Exame.findAll();
 };
 
 module.exports = listarExamesServices;

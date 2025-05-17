@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "nome": "Lucas Teste",
-  "datanascimento": 20020919,
+  "datanascimento": 2002-09-19,
   "email": "lucas@email.com",
   "cpf": "12345678900",
   "endereco": "Rua XPTO, 456",
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
   "nome": "Lucas Teste Atualizado",
-  "datanascimento": 20020919,
+  "datanascimento": "2002-09-19",
   "email": "lucas.updated@email.com",
   "cpf": "12345678900",
   "endereco": "Rua XPTO, 456 Atualizada",

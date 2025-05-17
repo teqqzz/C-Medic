@@ -2,14 +2,12 @@ const atualizarExameServices = require('../../services/Exames/atualizarExameServ
 
 const atualizarExameController = async (req, res) => {
   try {
-    const { exameid } = req.params;
-    const { descricao, codigo, valor, criadoPor } = req.body;
+    const { id } = req.params;
+    const { descricao, tipo, codigo, valor, criadoPor } = req.body;
 
-    // Atualiza o exame pelo ID
-    const exameAtualizado = await atualizarExameServices(
-      exameid,
-      { descricao, codigo, valor, criadoPor }
-    );
+    const exameAtualizado = await atualizarExameServices(id, {
+      descricao, tipo, codigo, valor, criadoPor
+    });
 
     if (!exameAtualizado) {
       return res.status(404).json({ mensagem: 'Exame não encontrado' });

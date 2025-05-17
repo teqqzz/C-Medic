@@ -1,12 +1,13 @@
 const Exame = require('../../models/exameModel');
 
-// Serviço para atualizar exame pelo exameid
-const atualizarExameServices = (exameid, dadosAtualizados) => {
-  return Exame.findOneAndUpdate(
-    { exameid },                
-    dadosAtualizados,           
-    { new: true }               
-  );
+const atualizarExameServices = async (id, dadosAtualizados) => {
+  const [linhasAfetadas] = await Exame.update(dadosAtualizados, {
+    where: { id }
+  });
+
+  if (linhasAfetadas === 0) return null;
+
+  return await Exame.findByPk(id);
 };
 
 module.exports = atualizarExameServices;

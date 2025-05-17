@@ -1,11 +1,10 @@
-const  deletarExameServices  = require('../../services/Exames/deletarExameServices');
+const deletarExameServices = require('../../services/Exames/deletarExameServices');
 
 const deletarExameController = async (req, res) => {
   try {
-    const { exameid } = req.params;
+    const { id } = req.params;
 
-    // Deleta o exame pelo ID
-    const exameDeletado = await deletarExameServices(exameid);
+    const exameDeletado = await deletarExameServices(id);
 
     if (!exameDeletado) {
       return res.status(404).json({ mensagem: 'Exame não encontrado' });
@@ -16,4 +15,5 @@ const deletarExameController = async (req, res) => {
     res.status(500).json({ mensagem: 'Erro ao deletar exame', erro: error.message });
   }
 };
+
 module.exports = deletarExameController;

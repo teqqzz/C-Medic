@@ -1,12 +1,30 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+const { Sequelize } = require('sequelize');
 
-// Use o URL de conexão fornecido pelo MongoDB Atlas
-const mongoURL = process.env.MONGO_URL || 'mongodb+srv://teste:teste@cluster0.mrin7sc.mongodb.net/';
+async function createDatabaseIfNotExists() {
+  // Conexão sem banco definido para criar o DB se não existir
+  const sequelize = new Sequelize('', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+    logging: false,
+  });
 
-// Conectar ao MongoDB Atlas
-mongoose.connect(mongoURL)
-  .then(() => console.log('Conectado ao MongoDB Atlas!'))
-  .catch(err => console.log('Erro ao conectar ao MongoDB Atlas:', err));
+  try {
+    await sequelize.query('CREATE DATABASE IF NOT EXISTS cmedic;');
+  } catch (error) {
+    console.error('Erro ao criar banco:', error);
+  } finally {
+    await sequelize.close();
+  }
+}
 
-module.exports = mongoose;
+// Instância do Sequelize apontando para o DB específico
+const database = new Sequelize('cmedic', 'root', '', {
+  host: 'localhost',
+  dialect: 'mysql',
+  logging: false,
+});
+
+module.exports = {
+  database,
+  createDatabaseIfNotExists,
+};

@@ -1,7 +1,6 @@
 const Paciente = require('../../models/pacienteModel');
 // Função para adicionar um novo paciente
 const criarPacienteServices = (pacienteData) => {
-  const paciente = new Paciente(pacienteData);
-  return paciente.save();
+  return Paciente.create(pacienteData);
 };
 module.exports = criarPacienteServices;

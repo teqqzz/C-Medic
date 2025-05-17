@@ -2,9 +2,9 @@ const deletarPacienteServices = require('../../services/Pacientes/deletarPacient
 
 const deletarPacienteController = async (req, res) => {
   try {
-    const { pacienteid } = req.params;
+    const { id } = req.params;
 
-    const pacienteDeletado = await deletarPacienteServices(pacienteid);
+    const pacienteDeletado = await deletarPacienteServices(id);
 
     if (!pacienteDeletado) {
       return res.status(404).json({ mensagem: 'Paciente não encontrado' });

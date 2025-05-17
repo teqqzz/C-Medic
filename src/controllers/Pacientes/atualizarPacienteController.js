@@ -2,13 +2,17 @@ const atualizarPacienteServices = require('../../services/Pacientes/atualizarPac
 
 const atualizarPacienteController = async (req, res) => {
   try {
-    const { pacienteid } = req.params;
+    const { id } = req.params;
     const { nome, datanascimento, email, cpf, endereco, criadoPor } = req.body;
 
-    const pacienteAtualizado = await atualizarPacienteServices(
-      pacienteid,
-      { nome, datanascimento, email, cpf, endereco, criadoPor }
-    );
+    const pacienteAtualizado = await atualizarPacienteServices(id, {
+      nome,
+      datanascimento,
+      email,
+      cpf,
+      endereco,
+      criadoPor,
+    });
 
     if (!pacienteAtualizado) {
       return res.status(404).json({ mensagem: 'Paciente não encontrado' });

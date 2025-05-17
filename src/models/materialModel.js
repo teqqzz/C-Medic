@@ -1,16 +1,47 @@
-const mongoose = require("../config/database");
-const mongooseSequence = require("mongoose-sequence")(mongoose);
+const { DataTypes } = require('sequelize');
+const { database } = require('../config/database');
 
-consta materialSchema = new mongoose.Schema({
-    descricao: { type: String, required: true },
-    codigo: { type: Number, required: true },
-    valor: { type: Number, required: true },
-    criadoEm: { type: Date, default: Date.now },
-    criadoPor: { type: String, required: true },
-})
-// autoincremento do campo id
-materialSchema.plugin(mongooseSequence, { inc_field: "materialid" });
-// Criar o modelo baseado no esquema
-const Material = mongoose.model("Material", materialSchema);
+const Material = database.define('Material', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true, // substitui o mongoose-sequence
+    primaryKey: true
+  },
+  descricao: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  tipo: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  codigo: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  valor: {
+    type: DataTypes.FLOAT, 
+    allowNull: false
+  },
+  quantidade: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  vencimento: {
+    type: DataTypes.DATEONLY,
+    allowNull: false
+  },
+  criadoEm: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  criadoPor: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  tableName: 'materiais',
+  timestamps: false
+});
 
 module.exports = Material;

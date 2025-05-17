@@ -5,7 +5,7 @@ const listarPacientesController = async (req, res) => {
     const pacientes = await listarPacientesServices();
     res.status(200).json(pacientes);
   } catch (err) {
-    res.status(500).json({ mensagem: 'Erro ao obter pacientes', erro: err });
+    res.status(500).json({ mensagem: 'Erro ao obter pacientes', erro: err.message });
   }
 };
 

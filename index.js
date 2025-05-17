@@ -1,17 +1,33 @@
 const express = require('express');
-const mongoose = require('./src/config/database');
-const pacienteRoutes = require('./src/routes/pacienteRoutes'); 
-const exameRoutes = require('./src/routes/exameRoutes'); 
+const { database, createDatabaseIfNotExists } = require('./src/config/database');
+
+const pacienteRoutes = require('./src/routes/pacienteRoutes');
+const exameRoutes = require('./src/routes/exameRoutes');
+const materialRoutes = require('./src/routes/materialRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // Habilita o uso de JSON no body das requisições
+app.use(express.json());
+app.use('/pacientes', pacienteRoutes);
+app.use('/exames', exameRoutes);
+app.use('/materiais', materialRoutes);
 
-// Rotas
-app.use('/pacientes', pacienteRoutes); // Rota para pacientes
-app.use('/exames', exameRoutes); // Rota para exame
+async function startServer() {
+  await createDatabaseIfNotExists();
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+  try {
+    await database.authenticate();
+    console.log('Conectado ao MySQL com sucesso!');
+
+    await database.sync({ alter: true });
+
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando em http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Erro ao conectar no MySQL:', error);
+  }
+}
+
+startServer();

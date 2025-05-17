@@ -1,27 +1,29 @@
-### Listar todos os pacientes
+### Listar todos os exame
 GET http://localhost:3000/exames/listarexame
 
-### Criar novo paciente
+### Criar novo Exame
 POST http://localhost:3000/exames/criarexame
 Content-Type: application/json
 
 {
 	"descricao": "ExameTeste",
+	"tipo": "Laboratorial",
 	"codigo": 123,
 	"valor": 10.80,
 	"criadoPor": "Teste"
 }
 
-### Atualizar um paciente existente
+### Atualizar um exame existente
 PUT http://localhost:3000/exames/atualizarexame/1
 Content-Type: application/json
 
 {
 	"descricao": "ExameTesteAtualizado",
+	"tipo": "Laboratorial",
 	"codigo": 123,
 	"valor": 10.80,
 	"criadoPor": "Teste"
 }
 
-### Deletar um paciente
+### Deletar um exame
 DELETE http://localhost:3000/exames/deletarexame/2

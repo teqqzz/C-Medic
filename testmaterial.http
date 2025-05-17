@@ -1,0 +1,33 @@
+### Listar todos os materiais
+GET http://localhost:3000/materiais/listarmaterial
+
+### Criar novo material
+POST http://localhost:3000/materiais/criarmaterial
+Content-Type: application/json
+
+{
+  "descricao": "Luvas Cirúrgicas",
+  "tipo": "Descartável",
+  "codigo": 1001,
+  "valor": 50.00,
+  "quantidade": 200,
+  "vencimento": "2025-12-31",
+  "criadoPor": "Admin"
+}
+
+### Atualizar um material existente
+PUT http://localhost:3000/materiais/atualizarmaterial/1
+Content-Type: application/json
+
+{
+  "descricao": "Luvas Cirúrgicas Premium",
+  "tipo": "Descartável",
+  "codigo": 1001,
+  "valor": 55.00,
+  "quantidade": 250,
+  "vencimento": "2026-06-30",
+  "criadoPor": "Admin Atualizado"
+}
+
+### Deletar um material
+DELETE http://localhost:3000/materiais/deletarmaterial/1

@@ -1,7 +1,7 @@
-const Material = require("../../models/materialModel");
+const Material = require('../../models/materialModel');
 
-const listarMateriaisServices = () => {
-    return Material.find();
-}
+const listarMateriaisServices = async () => {
+  return await Material.findAll();
+};
 
 module.exports = listarMateriaisServices;

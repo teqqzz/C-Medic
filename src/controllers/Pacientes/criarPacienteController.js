@@ -3,7 +3,8 @@ const criarPacienteServices = require('../../services/Pacientes/criarPacienteSer
 const criarPacienteController = async (req, res) => {
   try {
     const { nome, datanascimento, email, cpf, endereco, criadoPor } = req.body;
-    const pacienteSalvo = await criarPacienteServices({
+
+    const novoPaciente = await criarPacienteServices({
       nome,
       datanascimento,
       email,
@@ -12,7 +13,7 @@ const criarPacienteController = async (req, res) => {
       criadoPor
     });
 
-    res.status(201).json(pacienteSalvo);
+    res.status(201).json(novoPaciente);
   } catch (error) {
     res.status(500).json({ mensagem: 'Erro ao criar paciente', erro: error.message });
   }

@@ -1,7 +1,11 @@
 const Paciente = require('../../models/pacienteModel');
 
-const deletarPacienteServices = (pacienteid) => {
-  return Paciente.findOneAndDelete({ pacienteid });
+const deletarPacienteServices = async (id) => {
+  const paciente = await Paciente.findByPk(id);
+  if (!paciente) return null;
+
+  await paciente.destroy();
+  return paciente;
 };
 
 module.exports = deletarPacienteServices;
