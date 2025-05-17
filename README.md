@@ -46,7 +46,6 @@
 - Persistência de dados com banco relacional (ex: MySQL ou PostgreSQL).
 - Código modular e com boas práticas de organização (MVC ou Clean Architecture).
 - API RESTful documentada.
-- Utilização de autenticação JWT.
 - Segurança na manipulação de dados sensíveis.
 - Escalabilidade para suportar múltiplas clínicas e unidades.
 
@@ -65,10 +64,6 @@ C-Medic/
 │   ├── models/
 │   ├── routes/
 │   ├── services/
-│   ├── middlewares/
-│   └── utils/
-├── config/
-├── database/
 ├── .env
 ├── .gitignore
 ├── package.json
@@ -82,7 +77,4 @@ C-Medic/
 - Sequelize ou Prisma (ORM)
 - MySQL/PostgreSQL
 - JWT (autenticação)
-- Swagger (documentação da API)
-- Docker (opcional)
-
 ---
