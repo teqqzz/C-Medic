@@ -15,27 +15,10 @@
 
 
 - **Máquina de estados para vendas**
-  - Controle de status da consulta: `Agendada`, `Realizada`, `Cancelada`.
+  - Controle de status do Exame: `Agendada`, `Realizada`, `Cancelada`.
 
 - **Gestão de contas a pagar**
   - Pagamentos de médicos, fornecedores e despesas operacionais.
-
-## ✅ Requisitos Funcionais
-
-- O sistema deve permitir o cadastro, edição e exclusão de pacientes, funcionários e fornecedores.
-- Deve ser possível agendar e atualizar o status de uma consulta.
-- O sistema deve controlar o estoque de materiais com alertas de vencimento.
-- Deve gerar relatórios de contas a pagar/receber e de contabilidade.
-- O sistema deve emitir comprovantes e guias de convênio.
-
-## ⚙️ Requisitos Não Funcionais
-
-- Backend desenvolvido com **Node.js**.
-- Persistência de dados com banco relacional (ex: MySQL ou PostgreSQL).
-- Código modular e com boas práticas de organização (MVC ou Clean Architecture).
-- API RESTful documentada.
-- Segurança na manipulação de dados sensíveis.
-- Escalabilidade para suportar múltiplas clínicas e unidades.
 
 ## 🚧 Em desenvolvimento
 
