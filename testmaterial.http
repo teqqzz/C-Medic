@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "descricao": "Luvas Cirúrgicas",
-  "tipo": "Descartável",
+  "tipo": "Hospitalar",
   "codigo": 1001,
   "valor": 50.00,
   "quantidade": 200,
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "descricao": "Luvas Cirúrgicas Premium",
-  "tipo": "Descartável",
+  "tipo": "Hospitalar",
   "codigo": 1001,
   "valor": 55.00,
   "quantidade": 250,

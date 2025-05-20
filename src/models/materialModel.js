@@ -4,7 +4,7 @@ const { database } = require('../config/database');
 const Material = database.define('Material', {
   id: {
     type: DataTypes.INTEGER,
-    autoIncrement: true, // substitui o mongoose-sequence
+    autoIncrement: true, 
     primaryKey: true
   },
   descricao: {
@@ -12,7 +12,7 @@ const Material = database.define('Material', {
     allowNull: false
   },
   tipo: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('Medicamento', 'EPI', 'Escritorio', 'Hospitalar', 'Outros'),
     allowNull: false
   },
   codigo: {

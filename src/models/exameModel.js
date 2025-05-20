@@ -12,7 +12,7 @@ const Exame = database.define('Exame', {
     allowNull: false
   },
   tipo: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('Laboratorial', 'Clínico', 'Imagem', 'Outros'),
     allowNull: false
   },
   codigo: {

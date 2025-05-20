@@ -19,8 +19,8 @@ async function startServer() {
   try {
     await database.authenticate();
     console.log('Conectado ao MySQL com sucesso!');
-
-    await database.sync({ alter: true });
+    require('./src/models');
+    await database.sync({ alter: true, force: false });
 
     app.listen(PORT, () => {
       console.log(`Servidor rodando em http://localhost:${PORT}`);
