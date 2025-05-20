@@ -40,11 +40,13 @@
 
 ```bash
 C-Medic/
-├── config/              # Configurações de banco de dados
-├── controllers/         # Regras de negócio das rotas
-├── models/              # Definição das tabelas e relacionamentos Sequelize
-├── routes/              # Endpoints da API
-├── services/            # Lógica de aplicação (em progresso)
-├── .env                 # Variáveis de ambiente
-├── package.json         # Dependências do projeto
-└── README.md            # Documentação
+├── src/
+│   ├── config/              # Configurações de banco de dados
+│   ├── controllers/         # Regras de negócio das rotas
+│   ├── models/              # Definição das tabelas e relacionamentos Sequelize
+│   ├── routes/              # Endpoints da API
+│   ├── services/            # Lógica de aplicação (em progresso)
+├── tests/                   # Arquivos de teste (incluindo arquivos .http do REST Client)
+├── package-lock.json        # Dependências do projeto
+├── package.json             # Dependências do projeto
+└── README.md                # Documentação
