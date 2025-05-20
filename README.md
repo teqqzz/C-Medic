@@ -1,51 +1,50 @@
 # C-Medic
 
-**C-Medic** é um sistema de gestão para clínicas médicas e consultórios, desenvolvido em **Node.js**, com foco na automação e organização dos processos administrativos, clínicos e financeiros.
-
-## 📋 Funcionalidades
-
-- **Gestão de materiais**
-  - Controle de insumos médicos, como medicamentos e EPIs.
-
-- **Inventário de estoque**
-  - Monitoramento de entrada, uso e vencimento dos materiais.
-
-- **Processo de vendas**
-  - Agendamento de consultas.
-
-
-- **Máquina de estados para vendas**
-  - Controle de status do Exame: `Agendada`, `Realizada`, `Cancelada`.
-
-- **Gestão de contas a pagar**
-  - Pagamentos de médicos, fornecedores e despesas operacionais.
-
-## 🚧 Em desenvolvimento
-
-Este projeto ainda está em fase inicial de desenvolvimento. Acompanhe o progresso nas branches do repositório e colabore com sugestões e melhorias.
+**C-Medic** é um sistema de gestão para clínicas médicas e consultórios, desenvolvido em **Node.js**, com o objetivo de organizar agendamentos, exames, pacientes, materiais e estoques de forma eficiente e automatizada.
 
 ---
 
-## 📁 Estrutura sugerida
+## 📌 Funcionalidades implementadas
+
+- **Gestão de Pacientes**
+  - Cadastro e listagem de pacientes com dados pessoais.
+
+- **Gestão de Exames**
+  - Cadastro de exames com código, tipo, valor e responsável.
+
+- **Gestão de Materiais**
+  - Controle de insumos médicos como medicamentos, EPIs, hospitalares, etc.
+  - Gerenciamento de código, tipo, valor, quantidade e validade dos materiais.
+
+- **Agendamento**
+  - Agendamentos vinculados a pacientes, exames, horários e dias da agenda.
+  - Status dos horários: `Aberto`, `Marcado`, `Cancelado`.
+
+- **Agenda e Horários**
+  - Criação de agendas por dia e geração de horários vinculados a ela.
+  - Associação dos horários a exames agendados.
+
+---
+
+## ⚙️ Tecnologias utilizadas
+
+- **Node.js** com **Express**
+- **Sequelize** (ORM)
+- **MySQL** (banco de dados relacional)
+- **JWT (JSON Web Token)** - [em breve]
+- **XAMPP** para ambiente local com MySQL
+
+---
+
+## 📁 Estrutura do projeto
 
 ```bash
 C-Medic/
-├── src/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-├── .env
-├── .gitignore
-├── package.json
-└── README.md
-```
-
-## 🛠 Tecnologias previstas
-
-- Node.js
-- Express.js
-- Sequelize ou Prisma (ORM)
-- MySQL/PostgreSQL
-- JWT (autenticação)
----
+├── config/              # Configurações de banco de dados
+├── controllers/         # Regras de negócio das rotas
+├── models/              # Definição das tabelas e relacionamentos Sequelize
+├── routes/              # Endpoints da API
+├── services/            # Lógica de aplicação (em progresso)
+├── .env                 # Variáveis de ambiente
+├── package.json         # Dependências do projeto
+└── README.md            # Documentação
