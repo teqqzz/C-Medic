@@ -5,6 +5,10 @@ const pacienteRoutes = require('./src/routes/pacienteRoutes');
 const exameRoutes = require('./src/routes/exameRoutes');
 const materialRoutes = require('./src/routes/materialRoutes');
 const agendamentoRoutes = require('./src/routes/agendamentoRoutes');
+const funcionarioRoutes = require('./src/routes/funcionarioRoutes');
+const atendimentoRoutes = require('./src/routes/atendimentoRoutes');
+const estoqueRoutes = require('./src/routes/estoqueRoutes');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +18,9 @@ app.use('/pacientes', pacienteRoutes);
 app.use('/exames', exameRoutes);
 app.use('/materiais', materialRoutes);
 app.use('/agendamentos', agendamentoRoutes);
+app.use('/funcionarios', funcionarioRoutes);
+app.use('/atendimentos', atendimentoRoutes);
+app.use('/estoque', estoqueRoutes);
 
 async function startServer() {
   await createDatabaseIfNotExists();

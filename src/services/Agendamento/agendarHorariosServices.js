@@ -1,11 +1,7 @@
-const { Agendamento, Horario, Agenda, Exame, Paciente } = require('../../models');
-const { database } = require('../../config/database');
+const { Agendamento, Horario, Agenda, Exame, Paciente, Atendimento, database } = require('../../models');
 const { Op } = require('sequelize');
-const { subMonths, startOfDay } = require('date-fns');
 
-const RECENT_EXAM_PERIOD_MONTHS = 6;
-
-async function agendarHorariosServices({ pacienteId, horariosIds, exameId, observacoes }) {
+async function agendarHorariosServices({ pacienteId, horariosIds, exameId, observacoes, funcionarioIdLogado }) {
     const t = await database.transaction();
     try {
         const paciente = await Paciente.findByPk(pacienteId, { transaction: t });
@@ -18,67 +14,25 @@ async function agendarHorariosServices({ pacienteId, horariosIds, exameId, obser
             throw new Error(`Exame com ID ${exameId} não encontrado.`);
         }
 
-        const dataLimiteExameRecente = subMonths(new Date(), RECENT_EXAM_PERIOD_MONTHS);
-
-        const agendamentosRecentes = await Agendamento.findAll({
-            where: {
-                pacienteId,
-                exameId,
-            },
-            include: [{
-                model: Horario,
-                required: true,
-                include: [{
-                    model: Agenda,
-                    required: true,
-                    where: {
-                        data: {
-                            [Op.gte]: startOfDay(dataLimiteExameRecente)
-                        }
-                    }
-                }]
-            }],
-            transaction: t
-        });
-
-        const agendamentosRecentesNaoCancelados = agendamentosRecentes.filter(ag => ag.Horario.status !== 'Cancelado');
-
-        if (agendamentosRecentesNaoCancelados.length > 0) {
-            throw new Error(`Paciente já possui um agendamento para o exame '${exame.descricao}' nos últimos ${RECENT_EXAM_PERIOD_MONTHS} meses.`);
-        }
-
-        const agendadosComDetalhes = [];
+        const resultadosFinais = [];
 
         for (const horarioId of horariosIds) {
-            const horario = await Horario.findByPk(horarioId, {
-                include: [Agenda],
-                transaction: t
-            });
+            const horario = await Horario.findByPk(horarioId, { include: [Agenda], transaction: t });
 
             if (!horario) {
-                await t.rollback();
                 throw new Error(`Horário com ID ${horarioId} não encontrado.`);
             }
-
             if (horario.status !== 'Aberto') {
-                await t.rollback();
                 throw new Error(`Horário ${horario.hora} do dia ${new Date(horario.Agenda.data).toLocaleDateString()} não está disponível (Status: ${horario.status}).`);
             }
-            
             const agendamentoExistenteParaPacienteNoHorario = await Agendamento.findOne({
-                where: {
-                    pacienteId: pacienteId,
-                    horarioId: horarioId,
-                },
+                where: { pacienteId: pacienteId, horarioId: horarioId },
                 include: [{ model: Horario, where: { status: { [Op.ne]: 'Cancelado' } } }],
                 transaction: t
             });
-
             if (agendamentoExistenteParaPacienteNoHorario) {
-                 await t.rollback();
                  throw new Error(`Paciente já possui um agendamento não cancelado neste horário (${horario.hora} do dia ${new Date(horario.Agenda.data).toLocaleDateString()}).`);
             }
-
 
             const novoAgendamento = await Agendamento.create({
                 pacienteId,
@@ -89,19 +43,43 @@ async function agendarHorariosServices({ pacienteId, horariosIds, exameId, obser
 
             await horario.update({ status: 'Marcado' }, { transaction: t });
 
-            agendadosComDetalhes.push({
+            const novoAtendimento = await Atendimento.create({
                 agendamentoId: novoAgendamento.id,
-                pacienteNome: paciente.nome,
-                exameDescricao: exame.descricao,
-                data: horario.Agenda.data,
-                hora: horario.hora,
-                statusHorario: 'Marcado',
-                observacoes: novoAgendamento.observacoes
+                pacienteId: paciente.id,
+                exameId: exame.id,
+                funcionarioId: funcionarioIdLogado || null,
+                valorCobrado: exame.valor,
+                statusAtendimento: 'Agendado',
+                statusPagamento: 'Pendente',
+            }, { transaction: t });
+
+            resultadosFinais.push({
+                agendamento: {
+                    id: novoAgendamento.id,
+                    observacoes: novoAgendamento.observacoes,
+                    horarioId: novoAgendamento.horarioId,
+                    exameId: novoAgendamento.exameId,
+                    pacienteId: novoAgendamento.pacienteId
+                },
+                atendimento: {
+                    id: novoAtendimento.id,
+                    statusAtendimento: novoAtendimento.statusAtendimento,
+                    statusPagamento: novoAtendimento.statusPagamento,
+                    valorCobrado: novoAtendimento.valorCobrado
+                },
+                detalhesVisuais: {
+                    pacienteNome: paciente.nome,
+                    exameDescricao: exame.descricao,
+                    data: horario.Agenda.data,
+                    hora: horario.hora,
+                    statusHorarioFinal: 'Marcado',
+                }
             });
         }
 
         await t.commit();
-        return agendadosComDetalhes;
+        return resultadosFinais;
+
     } catch (error) {
         await t.rollback();
         throw error;

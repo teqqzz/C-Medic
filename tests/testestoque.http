@@ -1,0 +1,30 @@
+
+### Registrar Movimentação de Estoque (Entrada)
+POST http://localhost:3000/estoque/movimentacoes
+Content-Type: application/json
+
+{
+  "materialId": 1,
+  "tipoMovimentacao": "Entrada Compra",
+  "quantidade": 50,
+  "funcionarioId": 1,
+  "observacao": "Nota Fiscal #456, Fornecedor ABC"
+}
+
+### Registrar Movimentação de Estoque (Saída por Uso)
+POST http://localhost:3000/estoque/movimentacoes
+Content-Type: application/json
+
+{
+  "materialId": 1,
+  "tipoMovimentacao": "Saída por Uso",
+  "quantidade": 2,
+  "funcionarioId": 1,
+  "observacao": "Usado no atendimento ID 1"
+}
+
+### Consultar Saldo de um Material
+GET http://localhost:3000/estoque/materiais/1/saldo
+
+### Listar Movimentações de Estoque
+GET http://localhost:3000/estoque/movimentacoes?materialId=1&tipoMovimentacao=Saída por Uso

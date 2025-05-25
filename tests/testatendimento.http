@@ -1,0 +1,49 @@
+
+
+### Listar Atendimentos 
+GET http://localhost:3000/atendimentos?pacienteId=1
+
+### Buscar Atendimento por ID 
+GET http://localhost:3000/atendimentos/2
+
+### Registrar Chegada do Paciente para Atendimento 
+PATCH http://localhost:3000/atendimentos/2/registrar-chegada
+
+### Atualizar Dados de um Atendimento 
+PUT http://localhost:3000/atendimentos/2
+Content-Type: application/json
+
+{
+  "statusAtendimento": "Em Andamento",
+  "dataHoraInicioReal": "2025-07-15T10:30:00Z",
+  "observacoesClinicas": "Paciente relata dor leve."
+}
+
+### Atualizar Status para Realizado e adicionar Laudo
+PUT http://localhost:3000/atendimentos/2
+Content-Type: application/json
+
+{
+  "statusAtendimento": "Realizado",
+  "dataHoraFimReal": "2025-07-15T11:00:00Z",
+  "observacoesClinicas": "Procedimento concluído. Nenhuma intercorrência.",
+  "laudoPath": "/laudos/paciente1_exameX_20250715.pdf"
+}
+
+### Atualizar Status para Laudado
+PUT http://localhost:3000/atendimentos/2
+Content-Type: application/json
+
+{
+  "statusAtendimento": "Laudado"
+}
+
+### Registrar Pagamento para um Atendimento (Simulando um pagamento)
+# O serviço de atualizarDadosAtendimentoServices já pode receber valorPago e statusPagamento
+PUT http://localhost:3000/atendimentos/2
+Content-Type: application/json
+
+{
+  "valorPago": 150.00,
+  "statusPagamento": "Pago" 
+}

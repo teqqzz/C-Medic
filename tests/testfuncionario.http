@@ -1,0 +1,39 @@
+### Criar novo Funcionário
+POST http://localhost:3000/funcionarios
+Content-Type: application/json
+
+{
+  "nomeCompleto": "Carlos Pereira",
+  "cpf": "98765432100",
+  "email": "carlos.pereira@email.com",
+  "cargo": "Médico",
+  "dataAdmissao": "2023-05-10",
+  "salario": 8500.00,
+  "telefone": "41999887766",
+  "dataNascimento": "1985-10-20"
+}
+
+### Listar todos os Funcionários
+GET http://localhost:3000/funcionarios
+
+### Listar Funcionários com Filtro (por nome)
+GET http://localhost:3000/funcionarios?nome=Carlos
+
+### Listar Funcionários com Filtro (ativos)
+GET http://localhost:3000/funcionarios?ativo=true
+
+### Buscar Funcionário por ID (substitua 1 pelo ID desejado)
+GET http://localhost:3000/funcionarios/1
+
+### Atualizar Funcionário (substitua 1 pelo ID desejado)
+PUT http://localhost:3000/funcionarios/1
+Content-Type: application/json
+
+{
+  "cargo": "Médico Especialista",
+  "salario": 9200.00,
+  "email": "c.pereira.md@email.com"
+}
+
+### Deletar Funcionário (substitua 1 pelo ID desejado)
+DELETE http://localhost:3000/funcionarios/1
