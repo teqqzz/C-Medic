@@ -1,0 +1,62 @@
+
+### Gerar Agenda (Cria horários para os dias e intervalo especificados)
+# Pré-requisito: Nenhum específico, mas útil para ter horários para agendar.
+POST http://localhost:3000/agendamentos/gerar
+Content-Type: application/json
+
+{
+  "dias": ["segunda", "quarta", "sexta"],
+  "dataInicio": "2025-07-01",
+  "dataFim": "2025-07-31",
+  "intervalo": 30,
+  "horaInicial": "08:00",
+  "horaFinal": "18:00"
+}
+
+### Adicionar Encaixe (Cria um horário específico em uma data)
+# Pré-requisito: Nenhum específico.
+POST http://localhost:3000/agendamentos/encaixe
+Content-Type: application/json
+
+{
+  "data": "2025-07-15",
+  "hora": "10:15"
+}
+
+### Agendar Horários para um Paciente (Estilo Carrinho)
+# Pré-requisitos:
+# 1. Um Paciente criado (para obter um pacienteId válido, ex: 1)
+# 2. Um Exame criado (para obter um exameId válido, ex: 1)
+# 3. Horários disponíveis (gerados via /gerar ou /encaixe, para obter horariosIds válidos, ex: [10, 11, 12])
+POST http://localhost:3000/agendamentos/agendar
+Content-Type: application/json
+
+{
+  "pacienteId": 1,
+  "horariosIds": [3, 4],
+  "exameId": 1,
+  "observacoes": "Paciente com prioridade. Chegar 15 minutos antes."
+}
+
+### Listar Agendamentos de um Paciente Específico
+# Pré-requisito: Um Paciente com agendamentos (substitua :pacienteId pelo ID do paciente, ex: 1)
+GET http://localhost:3000/agendamentos/meus-agendamentos/1
+
+### Confirmar / Atualizar Status de um Agendamento
+# Pré-requisito: Um Agendamento criado (substitua :agendamentoId pelo ID do agendamento, ex: 1)
+# Status pode ser: "Marcado", "Cancelado". "Aberto" pode ser usado para reabrir um horário cancelado se não houver conflito.
+PUT http://localhost:3000/agendamentos/confirmar/3
+Content-Type: application/json
+
+{
+  "status": "Cancelado"
+}
+
+### Tentar Confirmar / Atualizar Status de um Agendamento para "Marcado"
+PUT http://localhost:3000/agendamentos/confirmar/3
+Content-Type: application/json
+
+{
+  "status": "Marcado"
+}
+

@@ -30,4 +30,4 @@ Content-Type: application/json
 }
 
 ### Deletar um material
-DELETE http://localhost:3000/materiais/deletarmaterial/1
+DELETE http://localhost:3000/materiais/deletarmaterial/2

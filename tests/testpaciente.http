@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "nome": "Lucas Teste",
-  "datanascimento": 2002-09-19,
+  "datanascimento": "2002-09-19",
   "email": "lucas@email.com",
   "cpf": "12345678900",
   "endereco": "Rua XPTO, 456",

@@ -4,49 +4,145 @@
 
 ---
 
-## 📌 Funcionalidades implementadas
+## 📚 Sumário
 
-- **Gestão de Pacientes**
-  - Cadastro e listagem de pacientes com dados pessoais.
-
-- **Gestão de Exames**
-  - Cadastro de exames com código, tipo, valor e responsável.
-
-- **Gestão de Materiais**
-  - Controle de insumos médicos como medicamentos, EPIs, hospitalares, etc.
-  - Gerenciamento de código, tipo, valor, quantidade e validade dos materiais.
-
-- **Agendamento**
-  - Agendamentos vinculados a pacientes, exames, horários e dias da agenda.
-  - Status dos horários: `Aberto`, `Marcado`, `Cancelado`.
-
-- **Agenda e Horários**
-  - Criação de agendas por dia e geração de horários vinculados a ela.
-  - Associação dos horários a exames agendados.
+- [Funcionalidades Implementadas](#-funcionalidades-implementadas)
+- [Requisitos Funcionais](#-requisitos-funcionais)
+- [Requisitos Não Funcionais](#-requisitos-não-funcionais)
+- [Diagrama BPMN do Processo de Agendamento](#-diagrama-bpmn-do-processo-de-agendamento)
+- [Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Como Executar (Sugestão)](#-como-executar-sugestão)
+- [Próximos Passos (Sugestão)](#-próximos-passos-sugestão)
 
 ---
 
-## ⚙️ Tecnologias utilizadas
+## 📌 Funcionalidades Implementadas
 
-- **Node.js** com **Express**
-- **Sequelize** (ORM)
-- **MySQL** (banco de dados relacional)
-- **JWT (JSON Web Token)** - [em breve]
-- **XAMPP** para ambiente local com MySQL
+-   **Gestão de Pacientes**
+    -   Cadastro, atualização, listagem e remoção de pacientes com dados pessoais.
+-   **Gestão de Exames**
+    -   Cadastro, atualização, listagem e remoção de exames com código, tipo, valor e responsável pela criação.
+-   **Gestão de Materiais**
+    -   Controle de insumos médicos como medicamentos, EPIs, materiais de escritório, hospitalares, etc.
+    -   Gerenciamento de código, tipo, valor, quantidade, data de vencimento e responsável pela criação.
+-   **Agenda e Horários**
+    -   Geração de agenda para datas específicas.
+    -   Criação de horários disponíveis dentro de uma agenda, com intervalos configuráveis.
+    -   Adição de horários de encaixe.
+-   **Agendamento**
+    -   Vinculação de agendamentos a pacientes, exames e horários específicos.
+    -   Gerenciamento do status dos horários: `Aberto`, `Marcado`, `Cancelado`.
+    -   **Agendamento Múltiplo (Estilo Carrinho):** Permite ao atendente selecionar e agendar vários horários para um mesmo paciente e exame em uma única operação.
+    -   **Verificação de Duplicidade de Agendamento para o Paciente:** O sistema impede que o mesmo paciente seja agendado para o mesmo horário se já existir um agendamento ativo (não cancelado) para ele nesse slot.
+    -   **Verificação de Exame Recente:** Antes de finalizar um novo agendamento, o sistema checa se o paciente já realizou o mesmo exame nos últimos 6 meses (e se este não foi cancelado), ajudando a evitar repetições desnecessárias.
+    -   **Confirmação e Cancelamento de Agendamentos:**
+        -   Possibilidade de atualizar o status de um agendamento (e, consequentemente, do horário associado) para `Marcado` ou `Cancelado`.
+        -   Ao cancelar um agendamento, uma observação sobre o cancelamento é registrada.
+        -   Ao tentar remarcar um horário que foi previamente cancelado, o sistema verifica se o slot já não foi preenchido por outro agendamento.
+    -   **Listagem Detalhada de Agendamentos do Paciente:** A consulta de agendamentos de um paciente agora retorna informações completas, incluindo nome do paciente, descrição do exame, data, hora e o status atual do horário.
 
 ---
 
-## 📁 Estrutura do projeto
+## 📋 Requisitos Funcionais
+
+**RF01:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Pacientes.
+**RF02:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Exames.
+**RF03:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Materiais.
+**RF04:** O sistema deve permitir a geração de Agendas (com dias e horários de atendimento).
+**RF05:** O sistema deve permitir a criação de horários de encaixe na agenda.
+**RF06:** O sistema deve permitir o agendamento de um ou mais horários para um Paciente para um Exame específico.
+**RF07:** O sistema deve impedir que um Paciente seja agendado para um horário que já está ocupado por outro agendamento ativo.
+**RF08:** O sistema deve impedir que um Paciente seja agendado para o mesmo horário mais de uma vez, a menos que o agendamento anterior esteja cancelado.
+**RF09:** O sistema deve alertar ou impedir o agendamento de um Exame para um Paciente se este já o realizou recentemente (últimos 6 meses) e o agendamento não foi cancelado.
+**RF10:** O sistema deve permitir a alteração do status de um agendamento (e do horário associado) para "Marcado" ou "Cancelado".
+**RF11:** O sistema deve permitir a visualização dos agendamentos de um Paciente, incluindo detalhes do paciente, exame, data, hora e status.
+**RF12:** (Futuro) O sistema deve permitir a autenticação de usuários (atendentes, administradores).
+
+---
+
+## ⚙️ Requisitos Não Funcionais
+
+**RNF01:** O sistema deve ser desenvolvido utilizando Node.js e Express.js.
+**RNF02:** O sistema deve utilizar Sequelize como ORM.
+**RNF03:** O sistema deve utilizar MySQL como banco de dados.
+**RNF04:** A API deve ser RESTful e retornar dados no formato JSON.
+**RNF05:** O tempo de resposta para requisições comuns da API deve ser inferior a 2 segundos sob condições normais de carga.
+**RNF06:** Informações sensíveis (como senhas de banco de dados) devem ser gerenciadas através de variáveis de ambiente em produção.
+**RNF07:** O código-fonte deve ser modular e bem organizado para facilitar a manutenção e escalabilidade.
+**RNF08:** (Futuro) O sistema deve implementar logs de auditoria para ações críticas.
+**RNF09:** (Futuro) O sistema deve ser seguro contra vulnerabilidades comuns da web (ex: SQL Injection - já mitigado pelo Sequelize, XSS).
+
+---
+
+## 🌊 Diagrama BPMN do Processo de Agendamento
+
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+-   **Node.js** com **Express** para o backend e construção da API.
+-   **Sequelize** como ORM (Object-Relational Mapper) para a interação com o banco de dados.
+-   **MySQL** como sistema de gerenciamento de banco de dados relacional.
+-   **XAMPP** (ou Docker, ou instalação direta do MySQL) para o ambiente de banco de dados local.
+-   **(Futuro) JSON Web Token (JWT)** para autenticação e autorização.
+
+---
+
+## 📁 Estrutura do Projeto
 
 ```bash
 C-Medic/
 ├── src/
-│   ├── config/              # Configurações de banco de dados
-│   ├── controllers/         # Regras de negócio das rotas
-│   ├── models/              # Definição das tabelas e relacionamentos Sequelize
-│   ├── routes/              # Endpoints da API
-│   ├── services/            # Lógica de aplicação (em progresso)
-├── tests/                   # Arquivos de teste (incluindo arquivos .http do REST Client)
-├── package-lock.json        # Dependências do projeto
-├── package.json             # Dependências do projeto
-└── README.md                # Documentação
+│   ├── config/           # Configurações de banco de dados
+│   ├── controllers/      # Responsáveis por receber as requisições HTTP, chamar os serviços e enviar respostas
+│   ├── models/           # Definição das tabelas e seus relacionamentos (Sequelize)
+│   ├── routes/           # Definição dos endpoints (URLs) da API
+│   ├── services/         # Camada contendo a lógica de negócio da aplicação
+├── tests/                # Arquivos de teste (ex: .http para REST Client, ou testes automatizados)
+├── .gitignore
+├── app.js                # Arquivo principal de configuração e inicialização do Express (ou server.js/index.js)
+├── package-lock.json
+├── package.json
+└── README.md             # Esta documentação
+```
+
+---
+## 🚀 Como Executar 
+
+1.  **Pré-requisitos:**
+    * Node.js (v18 ou superior recomendado)
+    * NPM ou Yarn
+    * Servidor MySQL instalado e em execução.
+
+2.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/teqqzz/C-Medic.git](https://github.com/teqqzz/C-Medic.git)
+    cd C-Medic
+    ```
+
+3.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+
+4.  **Configuração do Ambiente:**
+    * Renomeie (ou copie) o arquivo `.env.example` (se existir) para `.env`.
+    * Ajuste as variáveis no arquivo `.env` com as credenciais do seu banco de dados MySQL:
+        ```env
+        DB_HOST=localhost
+        DB_USER=root
+        DB_PASS=sua_senha_aqui
+        DB_NAME=cmedic
+        PORT=3000
+        ```
+    * Certifique-se de que o arquivo `src/config/database.js` esteja configurado para ler essas variáveis de ambiente.
+
+5.  **Inicie o servidor:**
+    ```bash
+    npm start
+    ```
+    O servidor deverá estar rodando em `http://localhost:3000` (ou a porta configurada).
+
+---

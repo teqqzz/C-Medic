@@ -4,6 +4,7 @@ const { database, createDatabaseIfNotExists } = require('./src/config/database')
 const pacienteRoutes = require('./src/routes/pacienteRoutes');
 const exameRoutes = require('./src/routes/exameRoutes');
 const materialRoutes = require('./src/routes/materialRoutes');
+const agendamentoRoutes = require('./src/routes/agendamentoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/pacientes', pacienteRoutes);
 app.use('/exames', exameRoutes);
 app.use('/materiais', materialRoutes);
+app.use('/agendamentos', agendamentoRoutes);
 
 async function startServer() {
   await createDatabaseIfNotExists();
