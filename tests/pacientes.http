@@ -1,5 +1,5 @@
 @api_base_url = http://localhost:3000/pacientes
-@funcionarioId_existente = 1 
+
 @pacienteId_criado = 1
 
 ### Criar novo paciente
@@ -12,8 +12,8 @@ Content-Type: application/json
   "email": "anaclara.souza@emailteste.com",
   "cpf": "111.222.333-01",
   "endereco": "Rua das Flores, 123, Bairro Primavera",
-  "criadoPor": "Legado" # Este campo será sobrescrito pelo nome do funcionário logado se funcionarioIdLogado for passado no controller
-  "funcionarioIdLogado": {{funcionarioId_existente}} 
+  "criadoPor": "Legado" ,
+  "funcionarioIdLogado": 1
 }
 
 ### Criar outro paciente (para testes de listagem/deleção)

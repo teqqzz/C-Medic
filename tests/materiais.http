@@ -2,8 +2,8 @@
 @funcionarioId_existente = 1
 @fornecedorId_existente = 1
 @materialId_criado = 1
-@materialId_baixo_estoque = 0 # Atualize com ID de material que terá baixo estoque
-@materialId_vencendo = 0 # Atualize com ID de material que estará próximo do vencimento
+@materialId_baixo_estoque = 0 
+@materialId_vencendo = 0
 
 ### Criar Material para teste de Baixo Estoque
 # POST {{api_base_url}}/criarmaterial

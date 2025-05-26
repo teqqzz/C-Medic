@@ -22,7 +22,7 @@ Content-Type: application/json
   "email": "contato@equipmedavancados.com",
   "nomeContato": "Sr. Roberto Medeiros",
   "ativo": true,
-    "funcionarioIdCriador": {{funcionarioId_existente}} 
+    "funcionarioIdCriador": 1
 }
 
 ### Criar novo Fornecedor (com CPF - pessoa física)

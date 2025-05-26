@@ -11,7 +11,7 @@ Content-Type: application/json
   "tipo": "Laboratorial",
   "codigo": 10101012, 
   "valor": 75.50
-  "funcionarioIdLogado": {{funcionarioId_existente}} 
+  "funcionarioIdLogado": 1
 }
 
 ### Criar outro Exame

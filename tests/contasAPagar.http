@@ -14,15 +14,15 @@ Content-Type: application/json
 
 {
   "descricao": "Pagamento de Aluguel - Mês Julho/2025",
-  "fornecedorId": {{fornecedorId_existente}},
-  "categoriaDespesaId": {{categoriaId_existente}},
+  "fornecedorId": 1,
+  "categoriaDespesaId": 1,
   "valorTotal": 1500.75,
   "dataEmissao": "2025-07-01",
   "dataVencimento": "2025-07-10",
   "numeroDocumento": "ALUGUEL-072025",
   "status": "Pendente",
-  "recorrente": true
-   "funcionarioIdCriador": {{funcionarioId_existente}} 
+  "recorrente": true,
+   "funcionarioIdCriador": 1
 }
 
 ### Criar outra Conta a Pagar (para fornecedor diferente)

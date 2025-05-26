@@ -10,7 +10,7 @@ Content-Type: application/json
 {
   "nome": "Material de Escritório",
   "descricao": "Despesas com materiais de escritório como papel, canetas, etc.",
-  "funcionarioIdCriador": {{funcionarioId_existente}} 
+  "funcionarioIdCriador": 1
 }
 
 ### Criar outra Categoria de Despesa

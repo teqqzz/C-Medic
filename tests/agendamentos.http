@@ -16,7 +16,7 @@ Content-Type: application/json
   "dias": ["segunda", "terca", "quarta", "quinta", "sexta"],
   "dataInicio": "2025-08-01",
   "dataFim": "2025-08-15",
-  "intervalo": 30,        // Intervalo em minutos
+  "intervalo": 30,       
   "horaInicial": "08:00",
   "horaFinal": "18:00"
 }
@@ -41,21 +41,21 @@ POST {{api_base_url}}/agendar
 Content-Type: application/json
 
 {
-  "pacienteId": {{pacienteId_existente}},
+  "pacienteId": 1,
   "agendamentosPropostos": [
     { 
-      "horarioId": {{horarioId_1}}, 
-      "exameId": {{exameId_A}}, 
+      "horarioId": 10, 
+      "exameId": 1, 
       "observacoes": "Paciente com prioridade. Chegar 15 minutos antes para o exame A." 
     },
     { 
-      "horarioId": {{horarioId_2}}, 
-      "exameId": {{exameId_B}}, 
+      "horarioId": 11, 
+      "exameId": 2, 
       "observacoes": "Jejum de 8 horas para o exame B." 
     },
     { 
-      "horarioId": {{horarioId_3}}, 
-      "exameId": {{exameId_A}},  
+      "horarioId": 12, 
+      "exameId": 1,  
       "observacoes": "Trazer exames anteriores, se houver." 
     }
   ]
