@@ -10,7 +10,7 @@ Content-Type: application/json
   "descricao": "Hemograma Completo",
   "tipo": "Laboratorial",
   "codigo": 10101012, 
-  "valor": 75.50
+  "valor": 75.50,
   "funcionarioIdLogado": 1
 }
 
@@ -23,6 +23,17 @@ Content-Type: application/json
   "tipo": "Imagem",
   "codigo": 20202025,
   "valor": 120.00
+}
+
+### Criar outro Exame
+POST {{api_base_url}}/criarexame
+Content-Type: application/json
+
+{
+  "descricao": "Raio-X do Tórax PA",
+  "tipo": "Imagem",
+  "codigo": 20202026,
+  "valor": 70.00
 }
 
 

@@ -1,6 +1,6 @@
+### Criar um novo Atendimento 
 POST http://localhost:3000/atendimentos/
 Content-Type: application/json
-
 {
   "agendamentoId": 1,
   "materialId": 1,
@@ -13,7 +13,7 @@ POST http://localhost:3000/atendimentos/
 Content-Type: application/json
 
 {
-  "agendamentoId": 4, 
+  "agendamentoId": 3, 
   "materialId": null, 
   "descricaoAtendimento": "Consulta de rotina.",
   "criadoPor": "Dr. Carlos"
