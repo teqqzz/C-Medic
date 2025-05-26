@@ -24,6 +24,7 @@ const Material = database.define('Material', {
   codigo: {
     type: DataTypes.STRING,
     allowNull: true,
+    unique: true 
   },
   unidadeMedida: {
     type: DataTypes.STRING,
@@ -53,13 +54,13 @@ const Material = database.define('Material', {
     type: DataTypes.DATEONLY,
     allowNull: true
   },
-  criadoEm: {
+  criadoEm: { 
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
-  criadoPor: {
+  criadoPor: { 
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true 
   },
   ativo: {
     type: DataTypes.BOOLEAN,
@@ -67,9 +68,7 @@ const Material = database.define('Material', {
   }
 }, {
   tableName: 'materiais',
-  timestamps: true 
+  timestamps: false 
 });
-
-
 
 module.exports = Material;

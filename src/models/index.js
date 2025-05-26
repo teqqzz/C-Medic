@@ -13,17 +13,17 @@ const Funcionario = require('./funcionarioModel');
 const Atendimento = require('./atendimentoModel');
 const ItemAtendimento = require('./itemAtendimentoModel');
 const MovimentacaoEstoque = require('./movimentacaoEstoqueModel');
-const Cargo = require('./cargoModel');                 
-const ContaReceber = require('./contaReceberModel');  
-const Fornecedor = require('./fornecedorModel');     
-const LoteMaterial = require('./loteMaterialModel'); 
+const Cargo = require('./cargoModel');
+const ContaReceber = require('./contaReceberModel');
+const Fornecedor = require('./fornecedorModel');
+const LoteMaterial = require('./loteMaterialModel');
 const CategoriaDespesa = require('./categoriaDespesaModel');
 const ContaPagar = require('./contaPagarModel');
 
 // --- ASSOCIAÇÕES ---
 
 // Cargo <-> Funcionario
-Cargo.hasMany(Funcionario, { foreignKey: 'cargoId', allowNull: true }); 
+Cargo.hasMany(Funcionario, { foreignKey: 'cargoId', allowNull: true });
 Funcionario.belongsTo(Cargo, { foreignKey: 'cargoId', allowNull: true });
 
 // Agendamento
@@ -52,13 +52,20 @@ ItemAtendimento.belongsTo(Exame, { foreignKey: 'exameId', allowNull: true });
 Material.hasMany(ItemAtendimento, { foreignKey: 'materialId', allowNull: true });
 ItemAtendimento.belongsTo(Material, { foreignKey: 'materialId', allowNull: true });
 
+// LoteMaterial
+Material.hasMany(LoteMaterial, { as: 'lotes', foreignKey: 'materialId', onDelete: 'CASCADE' }); 
+LoteMaterial.belongsTo(Material, { foreignKey: 'materialId' });
+
+Fornecedor.hasMany(LoteMaterial, { as: 'lotesFornecidos', foreignKey: 'fornecedorId', allowNull: true, onDelete: 'SET NULL' }); 
+LoteMaterial.belongsTo(Fornecedor, { as: 'fornecedorInfo', foreignKey: 'fornecedorId', allowNull: true });
+
 // MovimentacaoEstoque
 Material.hasMany(MovimentacaoEstoque, { foreignKey: 'materialId' });
 MovimentacaoEstoque.belongsTo(Material, { foreignKey: 'materialId', allowNull: false });
 Funcionario.hasMany(MovimentacaoEstoque, { foreignKey: 'funcionarioId' });
 MovimentacaoEstoque.belongsTo(Funcionario, { foreignKey: 'funcionarioId', allowNull: true });
-LoteMaterial.hasMany(MovimentacaoEstoque, { foreignKey: 'loteMaterialId', allowNull: true }); 
-MovimentacaoEstoque.belongsTo(LoteMaterial, { foreignKey: 'loteMaterialId', allowNull: true });
+LoteMaterial.hasMany(MovimentacaoEstoque, { as: 'movimentacoesDoLote', foreignKey: 'loteMaterialId', allowNull: true, onDelete: 'SET NULL' }); 
+MovimentacaoEstoque.belongsTo(LoteMaterial, { as: 'loteOrigemDestino', foreignKey: 'loteMaterialId', allowNull: true });
 
 // ContaReceber
 Atendimento.hasMany(ContaReceber, { foreignKey: 'atendimentoId', allowNull: true });
@@ -69,27 +76,15 @@ ContaReceber.belongsTo(Paciente, { foreignKey: 'pacienteId' });
 // ContaPagar
 Fornecedor.hasMany(ContaPagar, { foreignKey: 'fornecedorId', allowNull: true });
 ContaPagar.belongsTo(Fornecedor, { foreignKey: 'fornecedorId', allowNull: true });
-Funcionario.hasMany(ContaPagar, { foreignKey: 'funcionarioId', allowNull: true }); 
+Funcionario.hasMany(ContaPagar, { foreignKey: 'funcionarioId', allowNull: true });
 ContaPagar.belongsTo(Funcionario, { foreignKey: 'funcionarioId', allowNull: true });
 CategoriaDespesa.hasMany(ContaPagar, { foreignKey: 'categoriaDespesaId', allowNull: false });
 ContaPagar.belongsTo(CategoriaDespesa, { foreignKey: 'categoriaDespesaId' });
 
 module.exports = {
   database,
-  Paciente,
-  Exame,
-  Material,
-  Agenda,
-  Horario,
-  Agendamento,
-  Funcionario,
-  Atendimento,
-  ItemAtendimento,
-  MovimentacaoEstoque,
-  Cargo,
-  ContaReceber,
-  Fornecedor,     
-  LoteMaterial,
-  CategoriaDespesa,
+  Paciente, Exame, Material, Agenda, Horario, Agendamento,
+  Funcionario, Atendimento, ItemAtendimento, MovimentacaoEstoque,
+  Cargo, ContaReceber, Fornecedor, LoteMaterial, CategoriaDespesa,
   ContaPagar,
 };

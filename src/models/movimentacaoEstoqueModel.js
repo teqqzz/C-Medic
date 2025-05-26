@@ -8,17 +8,16 @@ const MovimentacaoEstoque = database.define('MovimentacaoEstoque', {
         autoIncrement: true,
         primaryKey: true,
     },
-
     tipoMovimentacao: {
         type: DataTypes.ENUM(
-            'Entrada Compra Lote', 
+            'Entrada Lote', 
             'Saída por Uso',
-            'Saída por Venda',
-            'Ajuste Inventário Positivo', 
-            'Ajuste Inventário Negativo', 
-            'Perda/Vencimento Lote', 
+            'Saída por Venda', 
+            'Ajuste Inventário Positivo',
+            'Ajuste Inventário Negativo',
+            'Perda/Vencimento Lote',
             'Devolução Fornecedor Lote',
-            'Devolução Cliente' 
+            'Devolução' 
         ),
         allowNull: false,
     },
@@ -34,7 +33,7 @@ const MovimentacaoEstoque = database.define('MovimentacaoEstoque', {
     observacao: {
         type: DataTypes.STRING,
     },
-    
+
 }, {
     tableName: 'movimentacoes_estoque',
     timestamps: true,

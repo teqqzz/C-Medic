@@ -8,21 +8,25 @@ const LoteMaterial = database.define('LoteMaterial', {
         autoIncrement: true,
         primaryKey: true,
     },
-    materialId: {
+    materialId: { 
         type: DataTypes.INTEGER,
-        allowNull: false, 
+        allowNull: false,
         references: {
             model: 'materiais', 
-            key: 'id'
-        }
+            key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT', 
     },
-    fornecedorId: {
+    fornecedorId: { 
         type: DataTypes.INTEGER,
         allowNull: true, 
         references: {
             model: 'fornecedores', 
-            key: 'id'
-        }
+            key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL', 
     },
     numeroLote: {
         type: DataTypes.STRING,
@@ -43,7 +47,7 @@ const LoteMaterial = database.define('LoteMaterial', {
             min: 1,
         }
     },
-    quantidadeAtualLote: {
+    quantidadeAtualLote: { 
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
@@ -58,12 +62,16 @@ const LoteMaterial = database.define('LoteMaterial', {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
+    ativo: { 
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    }
 }, {
     tableName: 'lotes_material',
     timestamps: true,
     indexes: [
         {
-            name: 'lotes_material_material_id_numero_lote_fornecedor_id_unique', 
+            name: 'idx_lotes_material_material_lote_fornecedor_unique',
             unique: true,
             fields: ['materialId', 'numeroLote', 'fornecedorId']
         }
