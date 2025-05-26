@@ -1,10 +1,10 @@
 const { DataTypes } = require('sequelize');
-const { database } = require('../config/database');
+const { database } = require('../config/database'); 
 
 const Exame = database.define('Exame', {
   id: {
     type: DataTypes.INTEGER,
-    autoIncrement: true, 
+    autoIncrement: true,
     primaryKey: true
   },
   descricao: {
@@ -16,21 +16,33 @@ const Exame = database.define('Exame', {
     allowNull: false
   },
   codigo: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.INTEGER, 
     allowNull: false
   },
   valor: {
-    type: DataTypes.FLOAT, 
+    type: DataTypes.FLOAT,
     allowNull: false
   },
-  criadoEm: {
+
+  criadoPor: {
+    type: DataTypes.STRING, 
+    allowNull: true 
+  },
+  funcionarioCriadorId: { 
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'funcionarios', 
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL' 
+  },
+  criadoEm: { 
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
-  },
-  criadoPor: {
-    type: DataTypes.STRING,
-    allowNull: false
   }
+
 }, {
   tableName: 'exames',
   timestamps: false 

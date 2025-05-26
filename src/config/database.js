@@ -17,7 +17,7 @@ async function createDatabaseIfNotExists() {
   }
 }
 
-
+// Instância do Sequelize apontando para o DB específico
 const database = new Sequelize('cmedic', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',

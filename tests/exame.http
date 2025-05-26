@@ -1,0 +1,47 @@
+@api_base_url = http://localhost:3000/exames
+@funcionarioId_existente = 1 
+@exameId_criado = 1
+
+### Criar novo Exame
+POST {{api_base_url}}/criarexame
+Content-Type: application/json
+
+{
+  "descricao": "Hemograma Completo",
+  "tipo": "Laboratorial",
+  "codigo": 10101012, 
+  "valor": 75.50
+  "funcionarioIdLogado": {{funcionarioId_existente}} 
+}
+
+### Criar outro Exame
+POST {{api_base_url}}/criarexame
+Content-Type: application/json
+
+{
+  "descricao": "Raio-X do Tórax PA/Perfil",
+  "tipo": "Imagem",
+  "codigo": 20202025,
+  "valor": 120.00
+}
+
+
+### Listar todos os exames
+GET {{api_base_url}}/listarexame
+
+
+### Atualizar um exame existente
+# Atualize @exameId_criado com o ID do Hemograma
+PUT {{api_base_url}}/atualizarexame/{{exameId_criado}}
+Content-Type: application/json
+
+{
+  "descricao": "Hemograma Completo com Plaquetas",
+  "valor": 85.00,
+  "tipo": "Laboratorial" 
+}
+
+
+### Deletar um exame
+# Use o ID do Raio-X (supondo que seja 2, ou o ID retornado na criação)
+DELETE {{api_base_url}}/deletarexame/2

@@ -1,0 +1,61 @@
+@api_base_url = http://localhost:3000/categorias-despesa
+@funcionarioId_existente = 1
+@categoriaId_criada = 1
+@categoriaId_para_deletar = 2
+
+### Criar nova Categoria de Despesa
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nome": "Material de Escritório",
+  "descricao": "Despesas com materiais de escritório como papel, canetas, etc.",
+  "funcionarioIdCriador": {{funcionarioId_existente}} 
+}
+
+### Criar outra Categoria de Despesa
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nome": "Aluguel",
+  "descricao": "Pagamento mensal do aluguel do espaço da clínica."
+}
+
+### Criar Categoria para teste de deleção
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nome": "Marketing Digital Teste",
+  "descricao": "Despesas com publicidade online e mídias sociais (para deletar)."
+}
+
+
+### Listar todas as Categorias de Despesa
+GET {{api_base_url}}/
+
+### Listar Categorias de Despesa com filtro por nome
+GET {{api_base_url}}/?nome=Material
+
+
+### Obter detalhes de uma Categoria de Despesa específica
+# Atualize @categoriaId_criada com o ID da categoria "Material de Escritório"
+GET {{api_base_url}}/{{categoriaId_criada}}
+
+
+### Atualizar uma Categoria de Despesa existente
+# Atualize @categoriaId_criada
+PUT {{api_base_url}}/{{categoriaId_criada}}
+Content-Type: application/json
+
+{
+  "nome": "Material de Escritório e Limpeza",
+  "descricao": "Despesas com materiais de escritório e produtos de limpeza."
+}
+
+### Deletar uma Categoria de Despesa
+# Atualize @categoriaId_para_deletar com o ID da categoria "Marketing Digital Teste"
+# Esta deleção só funcionará se não houver contas a pagar associadas a ela.
+DELETE {{api_base_url}}/{{categoriaId_para_deletar}}
+

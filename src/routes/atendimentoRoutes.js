@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-const buscarAtendimentoPorIdController = require('../controllers/Atendimentos/buscarAtendimentoPorIdController');
-const listarAtendimentosController = require('../controllers/Atendimentos/listarAtendimentosController');
-const atualizarDadosAtendimentoController = require('../controllers/Atendimentos/atualizarDadosAtendimentoController');
-const registrarChegadaPacienteController = require('../controllers/Atendimentos/registrarChegadaPacienteController');
 
+const criarAtendimentoController = require('../controllers/Atendimento/criarAtendimentoController');
+const listarAtendimentosController = require('../controllers/Atendimento/listarAtendimentosController');
+const obterAtendimentoController = require('../controllers/Atendimento/obterAtendimentoController');
+const atualizarStatusPagamentoAtendimentoController = require('../controllers/Atendimento/atualizarStatusPagamentoAtendimentoController');
 
-
+router.post('/', criarAtendimentoController);
 router.get('/', listarAtendimentosController);
-router.get('/:id', buscarAtendimentoPorIdController);
-router.put('/:id', atualizarDadosAtendimentoController); 
-router.patch('/:id/registrar-chegada', registrarChegadaPacienteController); 
+router.get('/:id', obterAtendimentoController);
+router.put('/:id/pagamento', atualizarStatusPagamentoAtendimentoController);
 
 module.exports = router;

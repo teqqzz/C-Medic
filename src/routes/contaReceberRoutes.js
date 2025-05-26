@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-const criarContaReceberController = require('../controllers/ContasReceber/criarContaReceberController'); 
-const listarContasReceberController = require('../controllers/ContasReceber/listarContasReceberController');
-const buscarContaReceberPorIdController = require('../controllers/ContasReceber/buscarContaReceberPorIdController');
-const registrarPagamentoContaReceberController = require('../controllers/ContasReceber/registrarPagamentoContaReceberController');
-const atualizarContaReceberController = require('../controllers/ContasReceber/atualizarContaReceberController'); 
-const deletarContaReceberController = require('../controllers/ContasReceber/deletarContaReceberController');
+
+const listarContasReceberController = require('../controllers/ContaReceber/listarContasReceberController');
+const obterContaReceberController = require('../controllers/ContaReceber/obterContaReceberController');
+const registrarPagamentoContaReceberController = require('../controllers/ContaReceber/registrarPagamentoContaReceberController');
+const cancelarContaReceberController = require('../controllers/ContaReceber/cancelarContaReceberController');
+const atualizarVencimentoContaReceberController = require('../controllers/ContaReceber/atualizarVencimentoContaReceberController');
 
 
-router.post('/', criarContaReceberController);
 router.get('/', listarContasReceberController);
-router.get('/:id', buscarContaReceberPorIdController);
+router.get('/:id', obterContaReceberController);
 router.patch('/:id/registrar-pagamento', registrarPagamentoContaReceberController);
-router.put('/:id', atualizarContaReceberController);
-router.delete('/:id', deletarContaReceberController);
+router.patch('/:id/cancelar', cancelarContaReceberController);
+router.patch('/:id/atualizar-vencimento', atualizarVencimentoContaReceberController);
+
 
 module.exports = router;

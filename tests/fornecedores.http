@@ -1,0 +1,99 @@
+@api_base_url = http://localhost:3000/fornecedores
+@funcionarioId_existente = 1 
+@fornecedorId_criado = 1 
+@fornecedorId_para_deletar = 2 
+
+### Criar novo Fornecedor (com CNPJ)
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nomeFantasia": "Equipamentos Médicos Avançados SA",
+  "razaoSocial": "Equipamentos Médicos Avançados Soluções Hospitalares S.A.",
+  "cnpj": "12.345.678/0001-99",
+  "inscricaoEstadual": "123.456.789.110",
+  "endereco": "Rua da Saúde",
+  "numero": "1000",
+  "bairro": "Distrito Industrial",
+  "cidade": "Cidade Saúde",
+  "estado": "SP",
+  "cep": "13480-000",
+  "telefonePrincipal": "1933334444",
+  "email": "contato@equipmedavancados.com",
+  "nomeContato": "Sr. Roberto Medeiros",
+  "ativo": true,
+    "funcionarioIdCriador": {{funcionarioId_existente}} 
+}
+
+### Criar novo Fornecedor (com CPF - pessoa física)
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nomeFantasia": "Consultoria Dr. João Pedro", 
+  "cpf": "111.222.333-44",
+  "endereco": "Av. Principal",
+  "numero": "500",
+  "bairro": "Centro",
+  "cidade": "Outra Cidade",
+  "estado": "MG",
+  "cep": "30100-000",
+  "telefonePrincipal": "31988887777",
+  "email": "joaopedro.consultor@email.com",
+  "ativo": true
+}
+
+### Criar Fornecedor para teste de deleção (sem contas a pagar inicialmente)
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nomeFantasia": "Fornecedor Descartável Ltda",
+  "cnpj": "99.888.777/0001-66",
+  "telefonePrincipal": "21966665555",
+  "email": "desc@email.com",
+  "ativo": true
+}
+
+
+### Listar todos os Fornecedores
+GET {{api_base_url}}/
+
+### Listar Fornecedores com filtro por nomeFantasia
+GET {{api_base_url}}/?nome=Avançados
+
+### Listar Fornecedores com filtro por CNPJ
+GET {{api_base_url}}/?cnpjCpf=12.345.678/0001-99
+
+### Listar Fornecedores com filtro por CPF
+GET {{api_base_url}}/?cnpjCpf=111.222.333-44
+
+### Listar Fornecedores ativos
+GET {{api_base_url}}/?ativo=true
+
+### Listar Fornecedores inativos
+GET {{api_base_url}}/?ativo=false
+
+
+### Obter detalhes de um Fornecedor específico
+# Atualize @fornecedorId_criado com o ID do primeiro fornecedor criado ("Equipamentos Médicos Avançados SA")
+GET {{api_base_url}}/{{fornecedorId_criado}}
+
+
+### Atualizar um Fornecedor existente
+# Atualize @fornecedorId_criado
+PUT {{api_base_url}}/{{fornecedorId_criado}}
+Content-Type: application/json
+
+{
+  "nomeFantasia": "Equipamentos Médicos Avançados (Filial Campinas)",
+  "razaoSocial": "Equipamentos Médicos Avançados Soluções Hospitalares S.A. - Filial Campinas",
+  "endereco": "Rua Nova Campinas",
+  "numero": "250",
+  "cidade": "Campinas",
+  "email": "campinas@equipmedavancados.com",
+  "observacoes": "Atualização de endereço e contato para filial Campinas."
+}
+
+### Inativar um Fornecedor (se não tiver contas a pagar associadas, será deletado)
+DELETE {{api_base_url}}/{{fornecedorId_para_deletar}}

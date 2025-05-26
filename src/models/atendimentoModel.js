@@ -1,66 +1,100 @@
-// src/models/atendimentoModel.js
 const { DataTypes } = require('sequelize');
-const { database } = require('../config/database');
+const { database } = require('../config/database'); 
 
 const Atendimento = database.define('Atendimento', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  agendamentoId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'agendamentos',
+      key: 'id',
     },
-    dataHoraInicioReal: {
-        type: DataTypes.DATE,
-        allowNull: true,
+  },
+  pacienteId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'pacientes',
+      key: 'id',
     },
-    dataHoraFimReal: {
-        type: DataTypes.DATE,
-        allowNull: true,
+  },
+  exameId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'exames',
+      key: 'id',
     },
-    statusAtendimento: {
-        type: DataTypes.ENUM(
-            'Agendado',
-            'Aguardando',
-            'Em Andamento',
-            'Realizado',
-            'Cancelado', 
-            'Não Compareceu',
-            'Laudado'
-        ),
-        defaultValue: 'Agendado',
-        allowNull: false,
+  },
+  materialId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'materiais',
+      key: 'id',
     },
-    statusPagamento: { 
-        type: DataTypes.ENUM(
-            'Pendente',
-            'Pago',
-            'Pago Parcialmente',
-            'Isento', 
-            'Cortesia'
-        ),
-        defaultValue: 'Pendente',
-        allowNull: false,
+  },
+  dataAtendimento: {
+    type: DataTypes.DATEONLY,
+    allowNull: false,
+  },
+  descricaoAtendimento: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  valorExame: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  valorMaterial: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  valorTotal: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  statusPagamento: {
+    type: DataTypes.ENUM('Pendente', 'Pago', 'Cancelado'),
+    allowNull: false,
+    defaultValue: 'Pendente',
+  },
+  criadoPor: {
+    type: DataTypes.STRING, 
+    allowNull: true
+  },
+  funcionarioCriadorId: { 
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'funcionarios',
+      key: 'id'
     },
-    valorCobrado: { 
-        type: DataTypes.FLOAT,
-        allowNull: false,
-        defaultValue: 0.0
-    },
-    valorPago: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
-        defaultValue: 0.0
-    },
-    observacoesClinicas: {
-        type: DataTypes.TEXT,
-    },
-    laudoPath: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  },
+  criadoEm: { 
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  atualizadoEm: { 
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    onUpdate: DataTypes.NOW,
+  }
 }, {
-    tableName: 'atendimentos',
-    timestamps: true,
+  tableName: 'atendimentos',
+  timestamps: true,
+  createdAt: 'criadoEm',
+  updatedAt: 'atualizadoEm',
 });
 
 module.exports = Atendimento;

@@ -1,21 +1,26 @@
-const listarMateriaisProximosVencimentoServices = require('../../services/Materiais/listarMateriaisProximosVencimentoServices');
+const listarMateriaisProximosVencimentoService = require('../../services/Materiais/listarMateriaisProximosVencimentoService');
 
-const listarMateriaisProximosVencimentoController = async (req, res) => {
-    try {
-        const meses = req.query.meses ? parseInt(req.query.meses) : 3;
+async function listarMateriaisProximosVencimentoController(req, res) {
+  try {
+    let { diasAntecedencia, incluirVencidos } = req.query;
 
-        const materiais = await listarMateriaisProximosVencimentoServices(meses);
-        if (materiais.length === 0) {
-            return res.status(200).json({ mensagem: `Nenhum material encontrado próximo do vencimento nos próximos ${meses} meses com estoque.`, data: [] });
-        }
-        res.status(200).json(materiais);
-    } catch (error) {
-        console.error('Erro ao listar materiais próximos do vencimento:', error);
-        if (error.message.includes('Meses de antecedência')) {
-            return res.status(400).json({ erro: error.message });
-        }
-        res.status(500).json({ erro: 'Erro interno ao buscar materiais próximos do vencimento.' });
+    // Converte para os tipos corretos, com defaults
+    diasAntecedencia = diasAntecedencia ? parseInt(diasAntecedencia, 10) : 60;
+    incluirVencidos = incluirVencidos === 'true' || incluirVencidos === true;
+
+    if (isNaN(diasAntecedencia) || diasAntecedencia < 0) {
+        return res.status(400).json({ erro: 'Parâmetro diasAntecedencia deve ser um número não negativo.' });
     }
-};
+
+    const materiais = await listarMateriaisProximosVencimentoService({ diasAntecedencia, incluirVencidos });
+    if (materiais.length === 0) {
+      return res.status(200).json({ mensagem: "Nenhum material encontrado próximo ao vencimento com os filtros aplicados.", data: [] });
+    }
+    res.status(200).json(materiais);
+  } catch (error) {
+    console.error("Erro no controller ao listar materiais próximos ao vencimento:", error.message);
+    res.status(500).json({ erro: 'Erro interno ao buscar materiais próximos ao vencimento.' });
+  }
+}
 
 module.exports = listarMateriaisProximosVencimentoController;

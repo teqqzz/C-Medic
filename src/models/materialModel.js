@@ -1,6 +1,5 @@
-// src/models/materialModel.js
 const { DataTypes } = require('sequelize');
-const { database } = require('../config/database');
+const { database } = require('../config/database'); 
 
 const Material = database.define('Material', {
   id: {
@@ -13,23 +12,13 @@ const Material = database.define('Material', {
     allowNull: false
   },
   tipo: {
-    type: DataTypes.ENUM(
-        'Medicamento', 'EPI', 'Material Cirúrgico', 'Material de Curativo',
-        'Material de Coleta Laboratorial', 'Material Odontológico',
-        'Material de Escritório', 'Material de Limpeza',
-        'Insumo Hospitalar Geral', 'Outros Insumos Médicos'
-    ),
+    type: DataTypes.ENUM('Medicamento', 'EPI', 'Escritorio', 'Hospitalar', 'Outros'),
     allowNull: false
   },
   codigo: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: DataTypes.STRING, 
+    allowNull: false,
     unique: true 
-  },
-  unidadeMedida: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    defaultValue: 'UN'
   },
   valor: { 
     type: DataTypes.FLOAT,
@@ -40,35 +29,56 @@ const Material = database.define('Material', {
     allowNull: false,
     defaultValue: 0
   },
-  estoqueMinimo: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 0
-  },
-  estoqueMaximo: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 0
-  },
-  vencimentoGeral: { 
+  vencimento: {
     type: DataTypes.DATEONLY,
+    allowNull: true 
+  },
+  unidadeMedida: { // Ex: 'un', 'cx', 'pct', 'L', 'mg'
+    type: DataTypes.STRING,
     allowNull: true
   },
-  criadoEm: { 
+  pontoPedido: { 
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  criadoPor: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  funcionarioCriadorId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'funcionarios',
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  },
+  fornecedorId: { 
+    type: DataTypes.INTEGER,
+    allowNull: true, 
+    references: {
+      model: 'fornecedores', 
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL' 
+  },
+  criadoEm: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
-  criadoPor: { 
-    type: DataTypes.STRING,
-    allowNull: true 
-  },
-  ativo: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
+  atualizadoEm: { 
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    onUpdate: DataTypes.NOW
   }
 }, {
   tableName: 'materiais',
-  timestamps: false 
+  timestamps: true, 
+  createdAt: 'criadoEm',
+  updatedAt: 'atualizadoEm'
 });
 
 module.exports = Material;

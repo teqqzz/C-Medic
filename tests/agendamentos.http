@@ -1,0 +1,80 @@
+@api_base_url = http://localhost:3000/agendamentos
+@pacienteId_existente = 1  
+@exameId_A = 1             
+@exameId_B = 2             
+@horarioId_1 = 10          
+@horarioId_2 = 11          
+@horarioId_3 = 12          
+@agendamentoId_criado = 1  
+
+### Gerar Agenda (Cria horários para os dias e intervalo especificados)
+# Pré-requisito: Nenhum específico.
+POST {{api_base_url}}/gerar
+Content-Type: application/json
+
+{
+  "dias": ["segunda", "terca", "quarta", "quinta", "sexta"],
+  "dataInicio": "2025-08-01",
+  "dataFim": "2025-08-15",
+  "intervalo": 30,        // Intervalo em minutos
+  "horaInicial": "08:00",
+  "horaFinal": "18:00"
+}
+
+### Adicionar Encaixe (Cria um horário específico em uma data)
+# Pré-requisito: Nenhum específico.
+POST {{api_base_url}}/encaixe
+Content-Type: application/json
+
+{
+  "data": "2025-08-05",
+  "hora": "10:15"
+}
+# Após criar, verifique o ID do horário gerado para usar nos testes abaixo.
+
+### Agendar Múltiplos Horários para Diferentes Exames (Estilo Carrinho)
+# Pré-requisitos:
+# 1. Paciente com ID @pacienteId_existente deve existir.
+# 2. Exames com IDs @exameId_A e @exameId_B devem existir.
+# 3. Horários com IDs @horarioId_1, @horarioId_2, @horarioId_3 devem existir e estar 'Abertos'.
+POST {{api_base_url}}/agendar
+Content-Type: application/json
+
+{
+  "pacienteId": {{pacienteId_existente}},
+  "agendamentosPropostos": [
+    { 
+      "horarioId": {{horarioId_1}}, 
+      "exameId": {{exameId_A}}, 
+      "observacoes": "Paciente com prioridade. Chegar 15 minutos antes para o exame A." 
+    },
+    { 
+      "horarioId": {{horarioId_2}}, 
+      "exameId": {{exameId_B}}, 
+      "observacoes": "Jejum de 8 horas para o exame B." 
+    },
+    { 
+      "horarioId": {{horarioId_3}}, 
+      "exameId": {{exameId_A}},  
+      "observacoes": "Trazer exames anteriores, se houver." 
+    }
+  ]
+}
+# Após o sucesso, anote um dos `agendamentoId` retornados em @agendamentoId_criado para os testes de confirmação.
+
+
+### Listar Agendamentos de um Paciente Específico
+# Pré-requisito: Paciente com ID @pacienteId_existente deve ter agendamentos.
+GET {{api_base_url}}/meus-agendamentos/{{pacienteId_existente}}
+
+
+### Confirmar / Atualizar Status de um Agendamento
+# Pré-requisito: Um Agendamento criado (use @agendamentoId_criado).
+# Status pode ser: "Marcado", "Cancelado". "Aberto" pode ser usado para reabrir um horário cancelado se não houver conflito.
+PUT {{api_base_url}}/confirmar/{{agendamentoId_criado}}
+Content-Type: application/json
+
+{
+  "status": "Cancelado" 
+}
+

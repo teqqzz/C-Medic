@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const criarFornecedorController = require('../controllers/Fornecedores/criarFornecedorController');
-const listarFornecedoresController = require('../controllers/Fornecedores/listarFornecedoresController');
-const buscarFornecedorPorIdController = require('../controllers/Fornecedores/buscarFornecedorPorIdController');
-const atualizarFornecedorController = require('../controllers/Fornecedores/atualizarFornecedorController');
-const deletarFornecedorController = require('../controllers/Fornecedores/deletarFornecedorController');
+// Importando os controllers de Fornecedor
+const criarFornecedorController = require('../controllers/Fornecedor/criarFornecedorController');
+const listarFornecedoresController = require('../controllers/Fornecedor/listarFornecedoresController');
+const obterFornecedorController = require('../controllers/Fornecedor/obterFornecedorController');
+const atualizarFornecedorController = require('../controllers/Fornecedor/atualizarFornecedorController');
+const deletarFornecedorController = require('../controllers/Fornecedor/deletarFornecedorController');
 
+// Rota para criar um novo fornecedor
 router.post('/', criarFornecedorController);
 router.get('/', listarFornecedoresController);
-router.get('/:id', buscarFornecedorPorIdController);
+router.get('/:id', obterFornecedorController);
 router.put('/:id', atualizarFornecedorController);
 router.delete('/:id', deletarFornecedorController);
 

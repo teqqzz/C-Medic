@@ -1,17 +1,23 @@
-const deletarFuncionarioServices = require('../../services/Funcionarios/deletarFuncionarioServices');
+const deletarFuncionarioServices = require('../../services/Funcionario/deletarFuncionarioServices');
 
-const deletarFuncionarioController = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const resultado = await deletarFuncionarioServices(id); // Pode retornar true/false ou o objeto
-        if (!resultado) { // Se o serviço retornar null ou false para "não encontrado"
-            return res.status(404).json({ erro: 'Funcionário não encontrado para deleção.' });
-        }
-        res.status(200).json({ mensagem: 'Funcionário deletado com sucesso.' }); // Ou 204 No Content se não retornar corpo
-    } catch (error) {
-        console.error('Erro ao deletar funcionário:', error);
-        res.status(500).json({ erro: 'Erro interno ao deletar funcionário.' });
+async function deletarFuncionarioController(req, res) {
+  try {
+    const { id } = req.params;
+    if (!id || isNaN(parseInt(id))) {
+        return res.status(400).json({ erro: 'ID do funcionário inválido.' });
     }
-};
+    const resultado = await deletarFuncionarioServices(parseInt(id, 10));
+    if (resultado === 0) {
+      return res.status(404).json({ mensagem: `Funcionário com ID ${id} não encontrado.` });
+    }
+    res.status(200).json({ mensagem: `Funcionário com ID ${id} deletado com sucesso.` });
+  } catch (error) {
+    console.error("Erro no controller ao deletar funcionário:", error.message);
+    if (error.message.includes('Não é possível deletar')) {
+        return res.status(409).json({ erro: error.message }); 
+    }
+    res.status(500).json({ erro: 'Erro interno ao deletar funcionário.' });
+  }
+}
 
 module.exports = deletarFuncionarioController;

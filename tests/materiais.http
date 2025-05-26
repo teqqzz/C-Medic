@@ -1,0 +1,107 @@
+@api_base_url = http://localhost:3000/materiais # Ajuste se sua rota base for diferente
+@funcionarioId_existente = 1
+@fornecedorId_existente = 1
+@materialId_criado = 1
+@materialId_baixo_estoque = 0 # Atualize com ID de material que terá baixo estoque
+@materialId_vencendo = 0 # Atualize com ID de material que estará próximo do vencimento
+
+### Criar Material para teste de Baixo Estoque
+# POST {{api_base_url}}/criarmaterial
+# Content-Type: application/json
+#
+# {
+#   "descricao": "Luvas Descartáveis P (Baixo Estoque)",
+#   "tipo": "EPI",
+#   "codigo": "LUVAP-BE01",
+#   "valor": 25.00,
+#   "quantidade": 5,        # Quantidade baixa
+#   "pontoPedido": 10,      # Ponto de pedido maior que a quantidade
+#   "unidadeMedida": "cx",
+#   "fornecedorId": {{fornecedorId_existente}}
+# }
+# Anote o ID e atualize @materialId_baixo_estoque
+
+
+### Criar Material para teste de Próximo Vencimento
+# POST {{api_base_url}}/criarmaterial
+# Content-Type: application/json
+#
+# {
+#   "descricao": "Kit Sutura (Vencendo em Breve)",
+#   "tipo": "Hospitalar",
+#   "codigo": "SUTURA-VB01",
+#   "valor": 75.00,
+#   "quantidade": 15,
+#   "pontoPedido": 5,
+#   "vencimento": "2025-06-15", # Coloque uma data próxima (ex: daqui a 20 dias)
+#   "unidadeMedida": "kit",
+#   "fornecedorId": {{fornecedorId_existente}}
+# }
+# Anote o ID e atualize @materialId_vencendo
+
+### Criar Material Vencido (para teste com incluirVencidos=true)
+# POST {{api_base_url}}/criarmaterial
+# Content-Type: application/json
+#
+# {
+#   "descricao": "Antibiótico X (Vencido)",
+#   "tipo": "Medicamento",
+#   "codigo": "ANTIX-VENC",
+#   "valor": 45.00,
+#   "quantidade": 3,
+#   "pontoPedido": 2,
+#   "vencimento": "2025-04-01", # Data passada
+#   "unidadeMedida": "frasco"
+# }
+
+
+# --- Testes CRUD (Manter os anteriores) ---
+
+### Criar novo material COM fornecedorId
+POST {{api_base_url}}/criarmaterial
+Content-Type: application/json
+
+{
+  "descricao": "Seringa Descartável 10ml",
+  "tipo": "Hospitalar",
+  "codigo": "SER10ML-XYZ",
+  "valor": 1.50,
+  "quantidade": 500,
+  "vencimento": "2027-12-31",
+  "unidadeMedida": "un",
+  "pontoPedido": 50,
+  "fornecedorId": {{fornecedorId_existente}}
+}
+
+### Listar todos os materiais
+GET {{api_base_url}}/listarmaterial
+
+### Obter um material específico (atualize @materialId_criado com um ID válido)
+GET {{api_base_url}}/listarmaterial/{{materialId_criado}}
+
+### Atualizar um material existente (atualize @materialId_criado)
+PUT {{api_base_url}}/atualizarmaterial/{{materialId_criado}}
+Content-Type: application/json
+{
+  "quantidade": 480,
+  "pontoPedido": 60
+}
+
+
+# --- Novos Testes para Relatórios de Estoque ---
+
+### Relatório: Listar Materiais com Baixo Estoque
+GET {{api_base_url}}/relatorios/baixo-estoque
+
+
+### Relatório: Listar Materiais Próximos ao Vencimento (default: 60 dias, não inclui vencidos)
+GET {{api_base_url}}/relatorios/proximo-vencimento
+
+### Relatório: Listar Materiais Próximos ao Vencimento (30 dias, não inclui vencidos)
+GET {{api_base_url}}/relatorios/proximo-vencimento?diasAntecedencia=30
+
+### Relatório: Listar Materiais Próximos ao Vencimento (90 dias, INCLUINDO vencidos)
+GET {{api_base_url}}/relatorios/proximo-vencimento?diasAntecedencia=90&incluirVencidos=true
+
+### Deletar um material (exemplo)
+# DELETE {{api_base_url}}/deletarmaterial/XYZ

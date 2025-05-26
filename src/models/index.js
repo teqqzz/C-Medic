@@ -1,90 +1,97 @@
-// src/models/index.js
-const { DataTypes } = require('sequelize');
-const { database } = require('../config/database');
-
-// Modelos
+// Imports dos Modelos
 const Paciente = require('./pacienteModel');
 const Exame = require('./exameModel');
 const Material = require('./materialModel');
 const Agenda = require('./agendaModel');
 const Horario = require('./horarioModel');
 const Agendamento = require('./agendamentoModel');
-const Funcionario = require('./funcionarioModel');
 const Atendimento = require('./atendimentoModel');
-const ItemAtendimento = require('./itemAtendimentoModel');
-const MovimentacaoEstoque = require('./movimentacaoEstoqueModel');
-const Cargo = require('./cargoModel');
 const ContaReceber = require('./contaReceberModel');
+const Funcionario = require('./funcionarioModel');
 const Fornecedor = require('./fornecedorModel');
-const LoteMaterial = require('./loteMaterialModel');
 const CategoriaDespesa = require('./categoriaDespesaModel');
 const ContaPagar = require('./contaPagarModel');
 
-// --- ASSOCIAÇÕES ---
-
-// Cargo <-> Funcionario
-Cargo.hasMany(Funcionario, { foreignKey: 'cargoId', allowNull: true });
-Funcionario.belongsTo(Cargo, { foreignKey: 'cargoId', allowNull: true });
-
-// Agendamento
-Paciente.hasMany(Agendamento, { foreignKey: 'pacienteId' });
+// --- Relacionamentos de Agendamento ---
+Paciente.hasMany(Agendamento, { foreignKey: 'pacienteId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Agendamento.belongsTo(Paciente, { foreignKey: 'pacienteId' });
-Exame.hasMany(Agendamento, { foreignKey: 'exameId' });
+
+Exame.hasMany(Agendamento, { foreignKey: 'exameId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Agendamento.belongsTo(Exame, { foreignKey: 'exameId' });
-Horario.hasOne(Agendamento, { foreignKey: 'horarioId' });
+
+Horario.hasOne(Agendamento, { foreignKey: 'horarioId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Agendamento.belongsTo(Horario, { foreignKey: 'horarioId' });
-Agenda.hasMany(Horario, { foreignKey: 'agendaId' });
+
+// --- Relacionamento de Horário ---
+Agenda.hasMany(Horario, { foreignKey: 'agendaId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Horario.belongsTo(Agenda, { foreignKey: 'agendaId' });
 
-// Atendimento
-Agendamento.hasOne(Atendimento, { as: 'atendimentoRealizado', foreignKey: 'agendamentoId', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
-Atendimento.belongsTo(Agendamento, { as: 'agendamentoOriginal', foreignKey: 'agendamentoId' });
-Paciente.hasMany(Atendimento, { foreignKey: 'pacienteId' });
-Atendimento.belongsTo(Paciente, { foreignKey: 'pacienteId', allowNull: false });
-Funcionario.hasMany(Atendimento, { foreignKey: 'funcionarioId' });
-Atendimento.belongsTo(Funcionario, { foreignKey: 'funcionarioId', allowNull: true });
+// --- Relacionamentos de Atendimento ---
+Agendamento.hasOne(Atendimento, { foreignKey: 'agendamentoId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Atendimento.belongsTo(Agendamento, { foreignKey: 'agendamentoId' });
 
-// ItemAtendimento
-Atendimento.hasMany(ItemAtendimento, { as: 'itens', foreignKey: 'atendimentoId', onDelete: 'CASCADE' });
-ItemAtendimento.belongsTo(Atendimento, { foreignKey: 'atendimentoId' });
-Exame.hasMany(ItemAtendimento, { foreignKey: 'exameId', allowNull: true });
-ItemAtendimento.belongsTo(Exame, { foreignKey: 'exameId', allowNull: true });
-Material.hasMany(ItemAtendimento, { foreignKey: 'materialId', allowNull: true });
-ItemAtendimento.belongsTo(Material, { foreignKey: 'materialId', allowNull: true });
+Paciente.hasMany(Atendimento, { foreignKey: 'pacienteId', onDelete: 'NO ACTION', onUpdate: 'CASCADE' }); // Paciente não deve ser deletado se tiver atendimentos
+Atendimento.belongsTo(Paciente, { foreignKey: 'pacienteId' });
 
-// LoteMaterial
-Material.hasMany(LoteMaterial, { as: 'lotes', foreignKey: 'materialId', onDelete: 'CASCADE' }); 
-LoteMaterial.belongsTo(Material, { foreignKey: 'materialId' });
+Exame.hasMany(Atendimento, { foreignKey: 'exameId', onDelete: 'NO ACTION', onUpdate: 'CASCADE' }); // Exame não deve ser deletado se usado em atendimentos
+Atendimento.belongsTo(Exame, { foreignKey: 'exameId' });
 
-Fornecedor.hasMany(LoteMaterial, { as: 'lotesFornecidos', foreignKey: 'fornecedorId', allowNull: true, onDelete: 'SET NULL' }); 
-LoteMaterial.belongsTo(Fornecedor, { as: 'fornecedorInfo', foreignKey: 'fornecedorId', allowNull: true });
+Material.hasMany(Atendimento, { foreignKey: 'materialId', onDelete: 'SET NULL', onUpdate: 'CASCADE' }); // Se material for deletado, atendimento não perde o registro
+Atendimento.belongsTo(Material, { foreignKey: 'materialId' });
 
-// MovimentacaoEstoque
-Material.hasMany(MovimentacaoEstoque, { foreignKey: 'materialId' });
-MovimentacaoEstoque.belongsTo(Material, { foreignKey: 'materialId', allowNull: false });
-Funcionario.hasMany(MovimentacaoEstoque, { foreignKey: 'funcionarioId' });
-MovimentacaoEstoque.belongsTo(Funcionario, { foreignKey: 'funcionarioId', allowNull: true });
-LoteMaterial.hasMany(MovimentacaoEstoque, { as: 'movimentacoesDoLote', foreignKey: 'loteMaterialId', allowNull: true, onDelete: 'SET NULL' }); 
-MovimentacaoEstoque.belongsTo(LoteMaterial, { as: 'loteOrigemDestino', foreignKey: 'loteMaterialId', allowNull: true });
+// --- Relacionamentos de ContaReceber ---
+Atendimento.hasOne(ContaReceber, { foreignKey: 'atendimentoId', onDelete: 'CASCADE', onUpdate: 'CASCADE' }); // Se atendimento for deletado, conta a receber também
+ContaReceber.belongsTo(Atendimento, { foreignKey: 'atendimentoId' });
 
-// ContaReceber
-Atendimento.hasMany(ContaReceber, { foreignKey: 'atendimentoId', allowNull: true });
-ContaReceber.belongsTo(Atendimento, { foreignKey: 'atendimentoId', allowNull: true });
-Paciente.hasMany(ContaReceber, { foreignKey: 'pacienteId', allowNull: false });
+Paciente.hasMany(ContaReceber, { foreignKey: 'pacienteId', onDelete: 'NO ACTION', onUpdate: 'CASCADE' });
 ContaReceber.belongsTo(Paciente, { foreignKey: 'pacienteId' });
 
-// ContaPagar
-Fornecedor.hasMany(ContaPagar, { foreignKey: 'fornecedorId', allowNull: true });
-ContaPagar.belongsTo(Fornecedor, { foreignKey: 'fornecedorId', allowNull: true });
-Funcionario.hasMany(ContaPagar, { foreignKey: 'funcionarioId', allowNull: true });
-ContaPagar.belongsTo(Funcionario, { foreignKey: 'funcionarioId', allowNull: true });
-CategoriaDespesa.hasMany(ContaPagar, { foreignKey: 'categoriaDespesaId', allowNull: false });
-ContaPagar.belongsTo(CategoriaDespesa, { foreignKey: 'categoriaDespesaId' });
+// --- Relacionamentos de "Criado Por Funcionário" ---
+Funcionario.hasMany(Exame, { foreignKey: 'funcionarioCriadorId', as: 'examesCriados' });
+Exame.belongsTo(Funcionario, { foreignKey: 'funcionarioCriadorId', as: 'funcionarioCriador' });
 
+Funcionario.hasMany(Material, { foreignKey: 'funcionarioCriadorId', as: 'materiaisCriadosPorFuncionario' });
+Material.belongsTo(Funcionario, { foreignKey: 'funcionarioCriadorId', as: 'funcionarioQueCriou' });
+
+Funcionario.hasMany(Paciente, { foreignKey: 'funcionarioCriadorId', as: 'pacientesCriados' });
+Paciente.belongsTo(Funcionario, { foreignKey: 'funcionarioCriadorId', as: 'funcionarioCriador' });
+
+Funcionario.hasMany(Atendimento, { foreignKey: 'funcionarioCriadorId', as: 'atendimentosCriados' });
+Atendimento.belongsTo(Funcionario, { foreignKey: 'funcionarioCriadorId', as: 'funcionarioCriador' });
+
+Funcionario.hasMany(Fornecedor, { foreignKey: 'funcionarioCriadorId', as: 'fornecedoresCriados' });
+Fornecedor.belongsTo(Funcionario, { foreignKey: 'funcionarioCriadorId', as: 'funcionarioCriadorFornecedor' });
+
+Funcionario.hasMany(CategoriaDespesa, { foreignKey: 'funcionarioCriadorId', as: 'categoriasDespesaCriadas' });
+CategoriaDespesa.belongsTo(Funcionario, { foreignKey: 'funcionarioCriadorId', as: 'funcionarioCriadorCategoria' });
+
+Funcionario.hasMany(ContaPagar, { foreignKey: 'funcionarioCriadorId', as: 'contasPagarCriadas' });
+ContaPagar.belongsTo(Funcionario, { foreignKey: 'funcionarioCriadorId', as: 'funcionarioCriadorContaPagar' });
+
+// --- Relacionamentos de Material com Fornecedor ---
+Fornecedor.hasMany(Material, { foreignKey: 'fornecedorId', as: 'materiaisFornecidos', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+Material.belongsTo(Fornecedor, { foreignKey: 'fornecedorId', as: 'fornecedorPrincipal' });
+
+// --- Relacionamentos de ContaPagar ---
+Fornecedor.hasMany(ContaPagar, { foreignKey: 'fornecedorId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' }); // Não deletar fornecedor se tiver contas a pagar
+ContaPagar.belongsTo(Fornecedor, { foreignKey: 'fornecedorId', as: 'fornecedor' });
+
+CategoriaDespesa.hasMany(ContaPagar, { foreignKey: 'categoriaDespesaId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' }); // Não deletar categoria se tiver contas
+ContaPagar.belongsTo(CategoriaDespesa, { foreignKey: 'categoriaDespesaId', as: 'categoriaDespesa' });
+
+
+// Exportando todos os modelos
 module.exports = {
-  database,
-  Paciente, Exame, Material, Agenda, Horario, Agendamento,
-  Funcionario, Atendimento, ItemAtendimento, MovimentacaoEstoque,
-  Cargo, ContaReceber, Fornecedor, LoteMaterial, CategoriaDespesa,
+  Paciente,
+  Exame,
+  Material,
+  Agenda,
+  Horario,
+  Agendamento,
+  Atendimento,
+  ContaReceber,
+  Funcionario,
+  Fornecedor,
+  CategoriaDespesa,
   ContaPagar,
 };
