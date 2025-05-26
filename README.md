@@ -59,63 +59,63 @@
 
 ## 📋 Requisitos Funcionais
 
-**RF01:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Pacientes.
+- **RF01:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Pacientes.
 
-**RF02:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Exames.
+- **RF02:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Exames.
 
-**RF03:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Materiais, incluindo controle de estoque, ponto de pedido e data de validade.
+- **RF03:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Materiais, incluindo controle de estoque, ponto de pedido e data de validade.
 
-**RF04:** O sistema deve permitir a geração de Agendas (com dias e horários de atendimento).
+- **RF04:** O sistema deve permitir a geração de Agendas (com dias e horários de atendimento).
 
-**RF05:** O sistema deve permitir a criação de horários de encaixe na agenda.
+- **RF05:** O sistema deve permitir a criação de horários de encaixe na agenda.
 
-**RF06:** O sistema deve permitir o agendamento de um ou mais horários (para um ou múltiplos exames) para um Paciente em uma única transação (estilo carrinho).
+- **RF06:** O sistema deve permitir o agendamento de um ou mais horários (para um ou múltiplos exames) para um Paciente em uma única transação (estilo carrinho).
 
-**RF07:** O sistema deve impedir que um Paciente seja agendado para um horário que já está ocupado por outro agendamento ativo.
+- **RF07:** O sistema deve impedir que um Paciente seja agendado para um horário que já está ocupado por outro agendamento ativo.
 
-**RF08:** O sistema deve impedir que um Paciente seja agendado para o mesmo horário mais de uma vez, a menos que o agendamento anterior esteja cancelado.
+- **RF08:** O sistema deve impedir que um Paciente seja agendado para o mesmo horário mais de uma vez, a menos que o agendamento anterior esteja cancelado.
 
-**RF09:** O sistema deve permitir a alteração do status de um agendamento (e do horário associado) para "Marcado", "Cancelado" ou "Realizado".
+- **RF09:** O sistema deve permitir a alteração do status de um agendamento (e do horário associado) para "Marcado", "Cancelado" ou "Realizado".
 
-**RF10:** O sistema deve permitir a visualização dos agendamentos de um Paciente.
+- **RF10:** O sistema deve permitir a visualização dos agendamentos de um Paciente.
 
-**RF11:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Funcionários, incluindo seu cargo.
+- **RF11:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Funcionários, incluindo seu cargo.
 
-**RF12:** O sistema deve permitir o cadastro, consulta, atualização e exclusão (ou inativação) de Fornecedores.
+- **RF12:** O sistema deve permitir o cadastro, consulta, atualização e exclusão (ou inativação) de Fornecedores.
 
-**RF13:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Categorias de Despesa.
+- **RF13:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Categorias de Despesa.
 
-**RF14:** O sistema deve permitir o cadastro, consulta, atualização (incluindo pagamento) e cancelamento de Contas a Pagar.
+- **RF14:** O sistema deve permitir o cadastro, consulta, atualização (incluindo pagamento) e cancelamento de Contas a Pagar.
 
-**RF15:** O sistema deve gerar automaticamente uma Conta a Receber ao criar um Atendimento.
+- **RF15:** O sistema deve gerar automaticamente uma Conta a Receber ao criar um Atendimento.
 
-**RF16:** O sistema deve permitir a consulta, registro de pagamento, cancelamento e alteração de vencimento de Contas a Receber.
+- **RF16:** O sistema deve permitir a consulta, registro de pagamento, cancelamento e alteração de vencimento de Contas a Receber.
 
-**RF17:** O sistema deve permitir a criação de um Atendimento a partir de um agendamento, associando materiais e gerando valores.
+- **RF17:** O sistema deve permitir a criação de um Atendimento a partir de um agendamento, associando materiais e gerando valores.
 
-**RF18:** O sistema deve registrar qual funcionário realizou o cadastro de entidades como Exames, Materiais, Pacientes, Atendimentos, Fornecedores, Categorias de Despesa e Contas a Pagar.
+- **RF18:** O sistema deve registrar qual funcionário realizou o cadastro de entidades como Exames, Materiais, Pacientes, Atendimentos, Fornecedores, Categorias de Despesa e Contas a Pagar.
 
-**RF19:** O sistema deve fornecer relatórios de: Baixo Estoque de Materiais e Materiais Próximos ao Vencimento.
+- **RF19:** O sistema deve fornecer relatórios de: Baixo Estoque de Materiais e Materiais Próximos ao Vencimento.
 
-**RF20:** O sistema deve fornecer relatórios contábeis de: Fluxo de Caixa, Contas a Receber (Aging), Contas a Pagar (Aging), DRE Simplificado, Faturamento por Exame, Despesas por Categoria.
+- **RF20:** O sistema deve fornecer relatórios contábeis de: Fluxo de Caixa, Contas a Receber (Aging), Contas a Pagar (Aging), DRE Simplificado, Faturamento por Exame, Despesas por Categoria.
 
 ---
 
 ## ⚙️ Requisitos Não Funcionais
 
-**RNF01:** O sistema deve ser desenvolvido utilizando Node.js e Express.js.
+- **RNF01:** O sistema deve ser desenvolvido utilizando Node.js e Express.js.
 
-**RNF02:** O sistema deve utilizar Sequelize como ORM.
+- **RNF02:** O sistema deve utilizar Sequelize como ORM.
 
-**RNF03:** O sistema deve utilizar MySQL como banco de dados.
+- **RNF03:** O sistema deve utilizar MySQL como banco de dados.
 
-**RNF04:** A API deve ser RESTful e retornar dados no formato JSON.
+- **RNF04:** A API deve ser RESTful e retornar dados no formato JSON.
 
-**RNF05:** O tempo de resposta para requisições comuns da API deve ser inferior a 2 segundos sob condições normais de carga.
+- **RNF05:** O tempo de resposta para requisições comuns da API deve ser inferior a 2 segundos sob condições normais de carga.
 
-**RNF06:** Informações sensíveis (como senhas de banco de dados) devem ser gerenciadas através de variáveis de ambiente em produção.
+- **RNF06:** Informações sensíveis (como senhas de banco de dados) devem ser gerenciadas através de variáveis de ambiente em produção.
 
-**RNF07:** O código-fonte deve ser modular e bem organizado para facilitar a manutenção e escalabilidade.
+- **RNF07:** O código-fonte deve ser modular e bem organizado para facilitar a manutenção e escalabilidade.
 
 
 ---
