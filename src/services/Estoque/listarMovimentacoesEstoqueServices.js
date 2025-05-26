@@ -15,10 +15,6 @@ const listarMovimentacoesEstoqueServices = async (filtros = {}) => {
     }
     if (filtros.funcionarioId) {
         whereClause.funcionarioId = filtros.funcionarioId;
-        // Certifique-se de que a associação com Funcionario está em includeClause se não estiver por padrão
-        // if (!includeClause.find(inc => inc.model === Funcionario)) {
-        //    includeClause.push({ model: Funcionario, attributes: ['id', 'nomeCompleto'] });
-        // }
     }
     if (filtros.dataInicio && filtros.dataFim) {
         whereClause.dataMovimentacao = {

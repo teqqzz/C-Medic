@@ -1,31 +1,59 @@
-### Listar todos os pacientes
-GET http://localhost:3000/pacientes/listarpaciente
+### =======================================
+###           MÓDULO: PACIENTES
+### =======================================
+# NOTA: Substitua os IDs de exemplo pelos IDs REAIS do seu banco.
 
-### Criar novo paciente
+### Criar Novo Paciente (João)
 POST http://localhost:3000/pacientes/criarpaciente
 Content-Type: application/json
 
 {
-  "nome": "Lucas Teste",
-  "datanascimento": "2002-09-19",
-  "email": "lucas@email.com",
-  "cpf": "12345678900",
-  "endereco": "Rua XPTO, 456",
-  "criadoPor": "Admin"
+  "nome": "João da Silva Teste",
+  "datanascimento": "1990-05-15",
+  "email": "joao.teste.pac@example.com",
+  "cpf": "11122233344",
+  "endereco": "Rua das Flores, 123",
+  "telefone": "41999887766",
+  "criadoPor": "SistemaDeTestes"
 }
+# Guarde o ID do paciente criado (ex: 1) para usar abaixo.
 
-### Atualizar um paciente existente
+### Criar Novo Paciente (Maria)
+POST http://localhost:3000/pacientes/criarpaciente
+Content-Type: application/json
+
+{
+  "nome": "Maria Oliveira Teste",
+  "datanascimento": "1985-10-20",
+  "email": "maria.teste.pac@example.com",
+  "cpf": "55566677788",
+  "endereco": "Avenida Central, 456",
+  "telefone": "41988776655",
+  "criadoPor": "SistemaDeTestes"
+}
+# Guarde o ID do paciente criado (ex: 2) para usar abaixo.
+
+### Listar Todos os Pacientes
+GET http://localhost:3000/pacientes/listarpaciente
+
+### Buscar Paciente por ID (ex: ID 1 - João)
+GET http://localhost:3000/pacientes/atualizarpaciente/1 
+# Nota: A rota para buscar por ID geralmente é GET /pacientes/:id.
+# Se /atualizarpaciente/:id também serve para GET, tudo bem, mas é incomum.
+# Se você tiver uma rota GET /pacientes/:id, use-a.
+
+### Atualizar Paciente (ex: ID 1 - João)
 PUT http://localhost:3000/pacientes/atualizarpaciente/1
 Content-Type: application/json
 
 {
-  "nome": "Lucas Teste Atualizado",
-  "datanascimento": "2002-09-19",
-  "email": "lucas.updated@email.com",
-  "cpf": "12345678900",
-  "endereco": "Rua XPTO, 456 Atualizada",
-  "criadoPor": "Admin"
+  "nome": "João da Silva Teste (Atualizado)",
+  "email": "joao.teste.pac.novo@example.com",
+  "endereco": "Rua das Flores, 123, Apto 10"
 }
 
-### Deletar um paciente
+### Deletar Paciente (ex: ID 2 - Maria)
+# CUIDADO: Esta ação é destrutiva.
+# Certifique-se de que o paciente não tem dependências (agendamentos, etc.)
+# ou que seu sistema lida com isso (ex: soft delete ou deleção em cascata configurada).
 DELETE http://localhost:3000/pacientes/deletarpaciente/2

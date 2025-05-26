@@ -1,18 +1,76 @@
-const atualizarDadosAtendimentoServices = require('../../services/Atendimentos/atualizarDadosAtendimentoServices');
 
-const atualizarDadosAtendimentoController = async (req, res) => {
+const { Atendimento, ItemAtendimento, Material, MovimentacaoEstoque, database } = require('../../models'); 
+const registrarMovimentacaoEstoqueServices = require('../../services/Estoque/registrarMovimentacaoEstoqueServices'); 
+
+const atualizarDadosAtendimentoServices = async (id, dadosParaAtualizar) => {
+    const t = await database.transaction(); 
     try {
-        const { id } = req.params;
-        // Validar req.body aqui se necessário (ex: Joi)
-        const atendimentoAtualizado = await atualizarDadosAtendimentoServices(id, req.body);
-        res.status(200).json(atendimentoAtualizado);
-    } catch (error) {
-        console.error('Erro ao atualizar dados do atendimento:', error);
-        if (error.message.includes('não encontrado') || error.message.includes('Nenhum dado válido')) {
-            return res.status(404).json({ erro: error.message });
+        const atendimento = await Atendimento.findByPk(id, {
+            include: [{ model: ItemAtendimento, as: 'itens', include: [Material] }], 
+            transaction: t
+        });
+
+        if (!atendimento) {
+            throw new Error('Atendimento não encontrado.');
         }
-        res.status(400).json({ erro: error.message }); // Outros erros podem ser 400
+
+        const statusAnterior = atendimento.statusAtendimento;
+        const novoStatus = dadosParaAtualizar.statusAtendimento;
+
+        const camposPermitidos = [
+            'statusAtendimento', 'statusPagamento',
+            'dataHoraInicioReal', 'dataHoraFimReal',
+            'observacoesClinicas', 'laudoPath',
+            'valorCobrado', 'valorPago', 'funcionarioId'
+        ];
+        const dadosValidos = {};
+        for (const campo of camposPermitidos) {
+            if (dadosParaAtualizar[campo] !== undefined) {
+                dadosValidos[campo] = dadosParaAtualizar[campo];
+            }
+        }
+
+        if (Object.keys(dadosValidos).length === 0) {
+            if (novoStatus && novoStatus !== statusAnterior) {
+            } else {
+                throw new Error('Nenhum dado válido fornecido para atualização.');
+            }
+        }
+        
+        // Atualiza os campos principais do atendimento
+        if (Object.keys(dadosValidos).length > 0) {
+            await atendimento.update(dadosValidos, { transaction: t });
+        }
+
+
+        // Lógica de BAIXA DE ESTOQUE se o atendimento foi para "Realizado"
+        if (novoStatus === 'Realizado' && statusAnterior !== 'Realizado') {
+            if (!atendimento.itens || atendimento.itens.length === 0) {
+                console.warn(`Atendimento ID ${atendimento.id} marcado como Realizado, mas não possui itens listados.`);
+            } else {
+                for (const item of atendimento.itens) {
+                    if (item.materialId && item.Material) {
+                        await registrarMovimentacaoEstoqueServices({
+                            materialId: item.materialId,
+                            tipoMovimentacao: 'Saída por Uso',
+                            quantidade: item.quantidade,
+                            funcionarioId: dadosParaAtualizar.funcionarioId || atendimento.funcionarioId || null, 
+                            observacao: `Uso no Atendimento ID: ${atendimento.id}, Item: ${item.Material.descricao}`
+                        }, t);
+                    }
+                }
+            }
+        }
+
+        await t.commit();
+        return atendimento.reload({ 
+             include: [{ model: ItemAtendimento, as: 'itens', include: [Material, Exame] }, Paciente, Funcionario, Agendamento]
+        });
+
+    } catch (error) {
+        await t.rollback();
+        throw error;
     }
 };
 
-module.exports = atualizarDadosAtendimentoController;
+module.exports = atualizarDadosAtendimentoServices;

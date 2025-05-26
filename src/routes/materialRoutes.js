@@ -1,22 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-// Importando os controllers
 const listarMateriaisController = require('../controllers/Materiais/listarMateriaisController');
 const criarMaterialController = require('../controllers/Materiais/criarMaterialController');
 const atualizarMaterialController = require('../controllers/Materiais/atualizarMaterialController');
 const deletarMaterialController = require('../controllers/Materiais/deletarMaterialController');
+const listarMateriaisProximosVencimentoController = require('../controllers/Materiais/listarMateriaisProximosVencimentoController');
+const listarMateriaisComEstoqueBaixoController = require('../controllers/Materiais/listarMateriaisComEstoqueBaixoController');
 
-// Rota para listar todos os materiais
-router.get('/listarmaterial', listarMateriaisController);
-
-// Rota para criar um novo material
-router.post('/criarmaterial', criarMaterialController);
-
-// Rota para atualizar um material existente
-router.put('/atualizarmaterial/:id', atualizarMaterialController);
-
-// Rota para excluir um material
-router.delete('/deletarmaterial/:id', deletarMaterialController);
+router.post('/', criarMaterialController);
+router.get('/', listarMateriaisController);
+router.get('/proximos-vencimento', listarMateriaisProximosVencimentoController);
+router.get('/estoque-baixo', listarMateriaisComEstoqueBaixoController);
+router.put('/:id', atualizarMaterialController);
+router.delete('/:id', deletarMaterialController);
 
 module.exports = router;

@@ -1,10 +1,11 @@
+// src/models/materialModel.js
 const { DataTypes } = require('sequelize');
 const { database } = require('../config/database');
 
 const Material = database.define('Material', {
   id: {
     type: DataTypes.INTEGER,
-    autoIncrement: true, 
+    autoIncrement: true,
     primaryKey: true
   },
   descricao: {
@@ -12,24 +13,45 @@ const Material = database.define('Material', {
     allowNull: false
   },
   tipo: {
-    type: DataTypes.ENUM('Medicamento', 'EPI', 'Escritorio', 'Hospitalar', 'Outros'),
+    type: DataTypes.ENUM(
+        'Medicamento', 'EPI', 'Material Cirúrgico', 'Material de Curativo',
+        'Material de Coleta Laboratorial', 'Material Odontológico',
+        'Material de Escritório', 'Material de Limpeza',
+        'Insumo Hospitalar Geral', 'Outros Insumos Médicos'
+    ),
     allowNull: false
   },
   codigo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  unidadeMedida: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: 'UN'
+  },
+  valor: { 
+    type: DataTypes.FLOAT,
+    allowNull: false
+  },
+  quantidade: { 
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 0
   },
-  valor: {
-    type: DataTypes.FLOAT, 
-    allowNull: false
-  },
-  quantidade: {
+  estoqueMinimo: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true,
+    defaultValue: 0
   },
-  vencimento: {
+  estoqueMaximo: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0
+  },
+  vencimentoGeral: { 
     type: DataTypes.DATEONLY,
-    allowNull: false
+    allowNull: true
   },
   criadoEm: {
     type: DataTypes.DATE,
@@ -37,11 +59,17 @@ const Material = database.define('Material', {
   },
   criadoPor: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
+  },
+  ativo: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   }
 }, {
   tableName: 'materiais',
-  timestamps: false
+  timestamps: true 
 });
+
+
 
 module.exports = Material;

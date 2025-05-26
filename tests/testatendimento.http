@@ -1,49 +1,46 @@
+### =======================================
+###           MÓDULO: ATENDIMENTOS
+### =======================================
+# NOTA: Atendimentos são criados automaticamente com Agendamentos.
+#       Estes testes focam em gerenciar atendimentos existentes.
+#       Substitua os IDs de exemplo pelos IDs REAIS do seu banco.
+#       Suponha que um agendamento anterior criou um atendimento com ID 1.
 
+### Listar Atendimentos (filtros opcionais)
+GET http://localhost:3000/atendimentos?pacienteId=1&statusPagamento=Pendente
 
-### Listar Atendimentos 
-GET http://localhost:3000/atendimentos?pacienteId=1
+### Buscar Atendimento por ID (ex: ID 1)
+GET http://localhost:3000/atendimentos/1
 
-### Buscar Atendimento por ID 
-GET http://localhost:3000/atendimentos/2
+### Registrar Chegada do Paciente para Atendimento (ex: ID 1)
+# O statusAtendimento deve mudar para 'Aguardando'.
+PATCH http://localhost:3000/atendimentos/1/registrar-chegada
 
-### Registrar Chegada do Paciente para Atendimento 
-PATCH http://localhost:3000/atendimentos/2/registrar-chegada
-
-### Atualizar Dados de um Atendimento 
-PUT http://localhost:3000/atendimentos/2
+### Atualizar Dados de um Atendimento (ex: ID 1 - Iniciar atendimento)
+PUT http://localhost:3000/atendimentos/1
 Content-Type: application/json
 
 {
   "statusAtendimento": "Em Andamento",
-  "dataHoraInicioReal": "2025-07-15T10:30:00Z",
-  "observacoesClinicas": "Paciente relata dor leve."
+  "dataHoraInicioReal": "2025-12-11T14:05:00Z", 
+  "observacoesClinicas": "Paciente chegou, sinais vitais aferidos."
 }
 
-### Atualizar Status para Realizado e adicionar Laudo
-PUT http://localhost:3000/atendimentos/2
+### Atualizar Dados de um Atendimento (ex: ID 1 - Finalizar e Laudar)
+# Isso também deve dar baixa no estoque dos materiais listados em ItemAtendimento.
+PUT http://localhost:3000/atendimentos/1
 Content-Type: application/json
 
 {
-  "statusAtendimento": "Realizado",
-  "dataHoraFimReal": "2025-07-15T11:00:00Z",
-  "observacoesClinicas": "Procedimento concluído. Nenhuma intercorrência.",
-  "laudoPath": "/laudos/paciente1_exameX_20250715.pdf"
+  "statusAtendimento": "Laudado", 
+  "dataHoraFimReal": "2025-12-11T14:25:00Z",
+  "observacoesClinicas": "Procedimento concluído. Laudo anexado.",
+  "laudoPath": "/laudos/paciente1_atendimento1_20251211.pdf",
+  "statusPagamento": "Pago", 
+  "valorPago": 150.00 
 }
-
-### Atualizar Status para Laudado
-PUT http://localhost:3000/atendimentos/2
-Content-Type: application/json
-
-{
-  "statusAtendimento": "Laudado"
-}
-
-### Registrar Pagamento para um Atendimento (Simulando um pagamento)
-# O serviço de atualizarDadosAtendimentoServices já pode receber valorPago e statusPagamento
-PUT http://localhost:3000/atendimentos/2
-Content-Type: application/json
-
-{
-  "valorPago": 150.00,
-  "statusPagamento": "Pago" 
-}
+# Verifique:
+# 1. Atendimento ID 1: status atualizado.
+# 2. Estoque dos materiais usados (se houver em ItemAtendimento) foi decrementado.
+# 3. Uma Conta a Receber (se o pagamento ainda estivesse pendente antes desta atualização)
+#    pode ter sido gerada/atualizada.

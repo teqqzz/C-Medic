@@ -2,8 +2,6 @@ const registrarMovimentacaoEstoqueServices = require('../../services/Estoque/reg
 
 const registrarMovimentacaoEstoqueController = async (req, res) => {
     try {
-        // Adicionar validação de req.body aqui (Joi, express-validator)
-        // Ex: req.body.funcionarioId pode vir do usuário autenticado
         const resultado = await registrarMovimentacaoEstoqueServices(req.body);
         res.status(201).json({ mensagem: "Movimentação de estoque registrada com sucesso.", ...resultado });
     } catch (error) {

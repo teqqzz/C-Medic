@@ -1,3 +1,4 @@
+// src/models/atendimentoModel.js
 const { DataTypes } = require('sequelize');
 const { database } = require('../config/database');
 
@@ -12,30 +13,28 @@ const Atendimento = database.define('Atendimento', {
         allowNull: true,
     },
     dataHoraFimReal: {
-        type: DataTypes.DATE, 
+        type: DataTypes.DATE,
         allowNull: true,
     },
     statusAtendimento: {
         type: DataTypes.ENUM(
-            'Agendado', 
-            'Aguardando', 
+            'Agendado',
+            'Aguardando',
             'Em Andamento',
             'Realizado',
-            'Cancelado',
+            'Cancelado', 
             'Não Compareceu',
-            'Laudado' 
+            'Laudado'
         ),
         defaultValue: 'Agendado',
         allowNull: false,
     },
-    statusPagamento: {
+    statusPagamento: { 
         type: DataTypes.ENUM(
             'Pendente',
             'Pago',
             'Pago Parcialmente',
-            'Isento',
-            'Aguardando Reembolso',
-            'Reembolsado',
+            'Isento', 
             'Cortesia'
         ),
         defaultValue: 'Pendente',
@@ -54,10 +53,11 @@ const Atendimento = database.define('Atendimento', {
     observacoesClinicas: {
         type: DataTypes.TEXT,
     },
-    laudoPath: { 
+    laudoPath: {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    
 }, {
     tableName: 'atendimentos',
     timestamps: true,

@@ -1,118 +1,147 @@
-### Gerar Agenda (Cria horários para os dias e intervalo especificados)
+### =======================================
+###           MÓDULO: AGENDAMENTOS
+### =======================================
+# NOTA: Substitua os IDs de exemplo (pacienteId: 1, exameId: 1, horarioId: 100, etc.)
+#       pelos IDs REAIS do seu banco de dados ou gerados em etapas anteriores.
+#       Crie Pacientes, Exames e Funcionários antes de executar estes testes.
+
+### Gerar Agenda
 POST http://localhost:3000/agendamentos/gerar
 Content-Type: application/json
 
 {
-  "dias": ["segunda", "terca"],
-  "dataInicio": "2025-10-06", 
-  "dataFim": "2025-10-07",
-  "intervalo": 60,
-  "horaInicial": "10:00",
-  "horaFinal": "12:00"
+  "dias": ["quinta", "sexta"],
+  "dataInicio": "2025-12-11", # Use uma data futura consistente
+  "dataFim": "2025-12-12",
+  "intervalo": 30,
+  "horaInicial": "14:00",
+  "horaFinal": "16:00"
 }
-# Após executar, verifique no banco os IDs dos horários criados.
-# Ex: Para 2025-10-06 (segunda), horários 10:00 (ID: 100) e 11:00 (ID: 101).
-# Ex: Para 2025-10-07 (terça), horário 10:00 (ID: 102).
+# Após executar, consulte seu banco para obter os IDs dos horários criados.
+# Ex: para 2025-12-11 (quinta):
+# - 14:00 (Suponha ID: 200)
+# - 14:30 (Suponha ID: 201)
+# - 15:00 (Suponha ID: 202)
+# - 15:30 (Suponha ID: 203)
+# E a AGENDA para 2025-12-11, suponha ID: 60.
 
-### Adicionar Encaixe (Cria um horário específico em uma data)
+### Adicionar Encaixe
 POST http://localhost:3000/agendamentos/encaixe
 Content-Type: application/json
 
 {
-  "data": "2025-10-06",
-  "hora": "11:30"
+  "data": "2025-12-11",
+  "hora": "16:00" # Um horário após o último gerado ou um novo
 }
-# Verifique o ID do horário de encaixe criado (ex: ID: 103).
+# Verifique o ID do horário de encaixe criado (ex: ID: 204).
 
 
-### Agendar Horário para Paciente 1, Exame 1
-# Use IDs de horários REAIS e ABERTOS (ex: 100)
+### Agendar Pacote de Itens para Paciente 1 no Horário 200
+# Pré-requisitos: pacienteId: 1, examePrincipalId: 1 (Consulta), exameId: 2 (Raio-X),
+# materialId: 1 (Seringa), funcionarioId: 1 (Atendente Ana) existem.
+# HorarioId: 200 (criado acima) deve estar 'Aberto'.
 POST http://localhost:3000/agendamentos/agendar
 Content-Type: application/json
 
 {
-  "pacienteId": 1,       
-  "horariosIds": [2,3],  
-  "exameId": 1,          
+  "pacienteId": 1,
+  "horariosIds": [200], 
+  "examePrincipalId": 1, 
+  "itensParaAtendimento": [
+    { "tipo": "exame", "id": 1, "quantidade": 1 },
+    { "tipo": "exame", "id": 2, "quantidade": 1 },
+    { "tipo": "material", "id": 1, "quantidade": 1 }
+  ],
   "funcionarioIdLogado": 1,
-  "observacoes": "Primeiro agendamento do Paciente 1."
+  "observacoes": "Agendamento Pacote Teste para Paciente 1."
 }
-# Guarde o ID do Agendamento criado (ex: agendamentoId: 1)
+# Guarde o ID do Agendamento criado (ex: agendamentoId: 20).
 
 
+### Agendar Outro Horário (simples) para Paciente 2 no Horário 201
+# Pré-requisitos: pacienteId: 2, examePrincipalId: 2, funcionarioId: 1 existem.
+# HorarioId: 201 (criado acima) deve estar 'Aberto'.
+POST http://localhost:3000/agendamentos/agendar
+Content-Type: application/json
+
+{
+  "pacienteId": 2,
+  "horariosIds": [201], 
+  "examePrincipalId": 2, 
+  "itensParaAtendimento": [
+    { "tipo": "exame", "id": 2, "quantidade": 1 }
+  ],
+  "funcionarioIdLogado": 1,
+  "observacoes": "Agendamento Simples Teste para Paciente 2."
+}
+# Guarde o ID do Agendamento criado (ex: agendamentoId: 21).
 
 
 ### Listar Agendamentos do Paciente 1
 GET http://localhost:3000/agendamentos/meus-agendamentos/1
 
 
-### Cancelar Agendamento do Paciente 1 (agendamentoId: 1)
-# O horário (ex: ID 100) deve voltar a ser "Aberto".
-PUT http://localhost:3000/agendamentos/confirmar/1
+### Cancelar Agendamento do Paciente 1 (ex: agendamentoId: 20)
+# O horário (ID 200) deve voltar a ser "Aberto".
+PUT http://localhost:3000/agendamentos/confirmar/20
 Content-Type: application/json
 
 {
-  "status": "Cancelado"
+  "status": "Cancelado" 
 }
 
 
-### Agendar Paciente 2 no Horário que o Paciente 1 Cancelou
-# Usando o mesmo horário (ex: ID 100) que voltou a ser "Aberto".
+### Agendar Paciente 2 no Horário que o Paciente 1 Cancelou (Horário 200)
 POST http://localhost:3000/agendamentos/agendar
 Content-Type: application/json
 
 {
   "pacienteId": 2,
-  "horariosIds": [100], 
-  "exameId": 1,         
+  "horariosIds": [200], 
+  "examePrincipalId": 1, 
+  "itensParaAtendimento": [
+    { "tipo": "exame", "id": 1, "quantidade": 1 }
+  ],
   "funcionarioIdLogado": 1,
-  "observacoes": "Paciente 2 agendado no horário vago."
+  "observacoes": "Paciente 2 agendado no horário vago (ex-ID 20)."
 }
-# Guarde o ID do Agendamento criado (ex: agendamentoId: 3)
+# Guarde o ID do Agendamento criado (ex: agendamentoId: 22).
 
 
-### Listar Agendamentos do Paciente 2 (deve ter dois agendamentos)
-GET http://localhost:3000/agendamentos/meus-agendamentos/1
+### Tentar Deletar Horário Agendado (Horário 201, agendamentoId: 21)
+# Deve falhar.
+DELETE http://localhost:3000/agendamentos/horarios/201
 
 
-### Tentar Deletar Horário Agendado (ex: agendamentoId: 2, horárioId: 101)
-# Deve falhar, pois o horário está 'Marcado'.
-DELETE http://localhost:3000/agendamentos/horarios/101
-
-
-### Cancelar o Segundo Agendamento do Paciente 2 (agendamentoId: 2)
-PUT http://localhost:3000/agendamentos/confirmar/3
+### Cancelar o Agendamento do Paciente 2 (agendamentoId: 21, no Horário 201)
+PUT http://localhost:3000/agendamentos/confirmar/21
 Content-Type: application/json
 
 {
   "status": "Cancelado"
 }
 
-### Deletar Horário que agora está Aberto (ex: horárioId: 101)
-# Agora deve funcionar.
-DELETE http://localhost:3000/agendamentos/horarios/101
+### Deletar Horário que agora está Aberto (Horário 201)
+DELETE http://localhost:3000/agendamentos/horarios/201
 
 
-### Tentar Deletar Agenda que tem Horário Agendado
-# Suponha que a agenda para 2025-10-06 tem o agendamentoId: 3 (no horárioId: 100).
-# Primeiro, você precisa do ID da AGENDA de 2025-10-06. Consulte o banco (ex: agendaId: 1).
-# Esta operação deve falhar.
-DELETE http://localhost:3000/agendamentos/agendas/1
+### Tentar Deletar Agenda (ex: ID 60) que ainda tem Horário Agendado (Horário 200, agendamentoId: 22)
+# Deve falhar.
+DELETE http://localhost:3000/agendamentos/agendas/60
 
-### Cancelar o Agendamento Restante na Agenda (agendamentoId: 3)
-PUT http://localhost:3000/agendamentos/confirmar/3
+### Cancelar o Agendamento Restante na Agenda (agendamentoId: 22, no Horário 200)
+PUT http://localhost:3000/agendamentos/confirmar/22
 Content-Type: application/json
 
 {
   "status": "Cancelado"
 }
 
-### Deletar os Horários Restantes da Agenda (ex: horárioId 100 e o de encaixe 103)
-DELETE http://localhost:3000/agendamentos/horarios/100
+### Deletar os Horários restantes da Agenda ID 60
+DELETE http://localhost:3000/agendamentos/horarios/200 # Horário que foi cancelado
+DELETE http://localhost:3000/agendamentos/horarios/202 # Horário que nunca foi usado
+DELETE http://localhost:3000/agendamentos/horarios/203 # Horário que nunca foi usado
+DELETE http://localhost:3000/agendamentos/horarios/204 # Horário de encaixe
 
-### Deletar Agenda que agora não tem horários agendados (ou não tem horários)
-# Agora deve funcionar (ex: agendaId: 1).
-DELETE http://localhost:3000/agendamentos/agendas/1
-
-### Deletar um Horário Individualmente (ex: horárioId: 102, da agenda de terça, que não foi usado)
-DELETE http://localhost:3000/agendamentos/horarios/102
+### Deletar Agenda (ex: ID 60) que agora está vazia ou só tem horários não agendados
+DELETE http://localhost:3000/agendamentos/agendas/60

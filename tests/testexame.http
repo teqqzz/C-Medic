@@ -1,29 +1,51 @@
-### Listar todos os exame
-GET http://localhost:3000/exames/listarexame
+### =======================================
+###           MÓDULO: EXAMES
+### =======================================
+# NOTA: Substitua os IDs de exemplo pelos IDs REAIS do seu banco.
 
-### Criar novo Exame
+### Criar Novo Exame (Consulta Clínica)
 POST http://localhost:3000/exames/criarexame
 Content-Type: application/json
 
 {
-	"descricao": "ExameTeste",
-	"tipo": "Laboratorial",
-	"codigo": 123,
-	"valor": 10.80,
-	"criadoPor": "Teste"
+  "descricao": "Consulta Clínica Geral Teste",
+  "tipo": "Clínico",
+  "codigo": "C001T",
+  "valor": 150.00,
+  "criadoPor": "Admin Teste"
 }
+# Guarde o ID do exame criado (ex: 1)
 
-### Atualizar um exame existente
+### Criar Novo Exame (Raio-X)
+POST http://localhost:3000/exames/criarexame
+Content-Type: application/json
+
+{
+  "descricao": "Raio-X de Tórax Teste",
+  "tipo": "Imagem",
+  "codigo": "RX001T",
+  "valor": 85.50,
+  "criadoPor": "Admin Teste"
+}
+# Guarde o ID do exame criado (ex: 2)
+
+### Listar Todos os Exames
+GET http://localhost:3000/exames/listarexame
+
+### Buscar Exame por ID (ex: ID 1 - Consulta)
+# Assumindo que sua rota de atualização também serve para GET, ou se você tem uma rota GET /exames/:id
+GET http://localhost:3000/exames/atualizarexame/1
+
+### Atualizar Exame (ex: ID 1 - Consulta)
 PUT http://localhost:3000/exames/atualizarexame/1
 Content-Type: application/json
 
 {
-	"descricao": "ExameTesteAtualizado",
-	"tipo": "Laboratorial",
-	"codigo": 123,
-	"valor": 10.80,
-	"criadoPor": "Teste"
+  "descricao": "Consulta Clínica Geral Teste (Valor Atualizado)",
+  "valor": 160.00
 }
 
-### Deletar um exame
+### Deletar Exame (ex: ID 2 - Raio-X)
+# CUIDADO: Esta ação é destrutiva.
+# Verifique dependências (agendamentos, itens de atendimento).
 DELETE http://localhost:3000/exames/deletarexame/2

@@ -34,10 +34,6 @@ const Funcionario = database.define('Funcionario', {
             isEmail: true,
         },
     },
-    cargo: {
-        type: DataTypes.STRING, 
-        allowNull: false,
-    },
     dataAdmissao: {
         type: DataTypes.DATEONLY,
         allowNull: false,

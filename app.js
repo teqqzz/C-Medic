@@ -8,6 +8,8 @@ const agendamentoRoutes = require('./src/routes/agendamentoRoutes');
 const funcionarioRoutes = require('./src/routes/funcionarioRoutes');
 const atendimentoRoutes = require('./src/routes/atendimentoRoutes');
 const estoqueRoutes = require('./src/routes/estoqueRoutes');
+const cargoRoutes = require('./src/routes/cargoRoutes');
+const contaReceberRoutes = require('./src/routes/contaReceberRoutes');
 
 
 const app = express();
@@ -21,6 +23,8 @@ app.use('/agendamentos', agendamentoRoutes);
 app.use('/funcionarios', funcionarioRoutes);
 app.use('/atendimentos', atendimentoRoutes);
 app.use('/estoque', estoqueRoutes);
+app.use('/cargos', cargoRoutes);
+app.use('/contasareceber', contaReceberRoutes);
 
 async function startServer() {
   await createDatabaseIfNotExists();

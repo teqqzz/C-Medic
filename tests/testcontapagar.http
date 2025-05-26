@@ -1,0 +1,119 @@
+### =======================================
+###       MÓDULO: CONTAS A PAGAR
+### =======================================
+# NOTA: Substitua IDs pelos reais do seu banco.
+#       Certifique-se de que Fornecedor ID 1, Funcionário ID 1 e CategoriaDespesa ID 1 existem.
+
+### Criar Categoria de Despesa (Pré-requisito)
+# POST http://localhost:3000/categoriasdespesa 
+# Content-Type: application/json
+# { "nome": "Aluguel", "descricao": "Despesas com aluguel do imóvel" }
+# @categoriaAluguelId = {{response.body.id}} (Suponha ID 1)
+
+# POST http://localhost:3000/categoriasdespesa
+# Content-Type: application/json
+# { "nome": "Material de Consumo", "descricao": "Compra de materiais para uso interno" }
+# @categoriaMaterialId = {{response.body.id}} (Suponha ID 2)
+
+
+### Criar Nova Conta a Pagar (Aluguel)
+POST http://localhost:3000/contasapagar
+Content-Type: application/json
+
+{
+  "descricao": "Aluguel Clínica - Dez/2025",
+  "valor": 3500.00,
+  "dataVencimento": "2025-12-10",
+  "categoriaDespesaId": 1, 
+  "fornecedorId": null, 
+  "observacoes": "Pagamento referente ao aluguel do mês."
+}
+# @contaAluguelId = 1
+
+### Criar Nova Conta a Pagar (Compra de Material)
+# Supondo Fornecedor ID 1 existe
+POST http://localhost:3000/contasapagar
+Content-Type: application/json
+
+{
+  "descricao": "Compra de Seringas Lote ABC",
+  "valor": 250.75,
+  "dataVencimento": "2025-12-20",
+  "categoriaDespesaId": 2, 
+  "fornecedorId": 1,       
+  "status": "Pendente"
+}
+# @contaMaterialId = 1
+
+### Listar Todas as Contas a Pagar
+GET http://localhost:3000/contasapagar
+
+### Listar Contas a Pagar (Filtrando por status Pendente)
+GET http://localhost:3000/contasapagar?status=Pendente
+
+### Listar Contas a Pagar (Vencidas)
+# Ajuste a data atual para que este teste funcione como esperado
+GET http://localhost:3000/contasapagar?vencidas=true
+
+### Buscar Conta a Pagar por ID (Aluguel)
+GET http://localhost:3000/contasapagar/1
+
+### Registrar Pagamento Parcial na Conta de Material
+PUT http://localhost:3000/contasapagar/1
+Content-Type: application/json
+
+{
+  "valorPago": 100.00,
+  "dataPagamento": "2025-12-15"
+}
+# Verifique: status deve ser 'Paga Parcialmente', valorPago atualizado.
+
+### Registrar Pagamento Total na Conta de Material (pagando o restante)
+# Valor original: 250.75, Pago: 100.00, Restante: 150.75
+PUT http://localhost:3000/contasapagar/1
+Content-Type: application/json
+
+{
+  "valorPago": 150.75,
+  "dataPagamento": "2025-12-18"
+}
+# Verifique: status deve ser 'Paga Totalmente', valorPago acumulado.
+
+### Editar Dados da Conta de Aluguel (antes de pagar)
+PUT http://localhost:3000/contasapagar/1
+Content-Type: application/json
+
+{
+  "descricao": "Aluguel Clínica - Dezembro/2025 (Corrigido)",
+  "dataVencimento": "2025-12-12",
+  "observacoes": "Vencimento prorrogado."
+}
+
+### Pagar Totalmente a Conta de Aluguel
+PUT http://localhost:3000/contasapagar/1
+Content-Type: application/json
+
+{
+  "valorPago": 3500.00,
+  "dataPagamento": "2025-12-11",
+  "status": "Paga Totalmente" 
+}
+
+### Tentar Deletar Conta Paga (Material)
+# Deve falhar se a regra no serviço impedir
+DELETE http://localhost:3000/contasapagar/1
+
+### Criar uma Conta para Deletar
+POST http://localhost:3000/contasapagar
+Content-Type: application/json
+
+{
+  "descricao": "Conta Teste para Deleção",
+  "valor": 50.00,
+  "dataVencimento": "2026-01-01",
+  "categoriaDespesaId": 1
+}
+# @contaParaDeletarId = 1
+
+### Deletar Conta Pendente
+DELETE http://localhost:3000/contasapagar/1

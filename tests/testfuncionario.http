@@ -1,39 +1,67 @@
-### Criar novo Funcionário
+### =======================================
+###         MÓDULO: FUNCIONÁRIOS
+### =======================================
+# NOTA: Substitua os IDs de exemplo pelos IDs REAIS do seu banco.
+#       Certifique-se de que os CARGO IDs (ex: 1) existem antes de criar funcionários.
+
+### Criar Novo Funcionário (Carla - Atendente)
+# Supondo que o Cargo "Atendente de Clínica" tem ID 1
 POST http://localhost:3000/funcionarios
 Content-Type: application/json
 
 {
-  "nomeCompleto": "Carlos Pereira",
-  "cpf": "98765432100",
-  "email": "carlos.pereira@email.com",
-  "cargo": "Médico",
-  "dataAdmissao": "2023-05-10",
-  "salario": 8500.00,
-  "telefone": "41999887766",
-  "dataNascimento": "1985-10-20"
+  "nomeCompleto": "Carla Mendes Teste",
+  "cpf": "77788899900",
+  "email": "carla.mendes.func@example.com",
+  "cargoId": 1, 
+  "dataAdmissao": "2024-02-01",
+  "telefone": "41977778888",
+  "dataNascimento": "1992-08-10",
+  "salario": 3000.00,
+  "ativo": true
 }
+# Guarde o ID do funcionário (ex: 1)
 
-### Listar todos os Funcionários
+### Criar Novo Funcionário (Roberto - Médico)
+# Supondo que o Cargo "Médico Clínico Geral" tem ID 2
+POST http://localhost:3000/funcionarios
+Content-Type: application/json
+
+{
+  "nomeCompleto": "Dr. Roberto Alves Teste",
+  "cpf": "12121212121",
+  "email": "roberto.alves.func@example.com",
+  "cargoId": 2,
+  "dataAdmissao": "2023-01-15",
+  "telefone": "41966665555",
+  "dataNascimento": "1978-12-03",
+  "salario": 15000.00,
+  "ativo": true
+}
+# Guarde o ID do funcionário (ex: 2)
+
+### Listar Todos os Funcionários
 GET http://localhost:3000/funcionarios
 
-### Listar Funcionários com Filtro (por nome)
-GET http://localhost:3000/funcionarios?nome=Carlos
+### Listar Funcionários (Filtrando por nome)
+GET http://localhost:3000/funcionarios?nome=Carla
 
-### Listar Funcionários com Filtro (ativos)
+### Listar Funcionários (Filtrando por ativos)
 GET http://localhost:3000/funcionarios?ativo=true
 
-### Buscar Funcionário por ID (substitua 1 pelo ID desejado)
+### Buscar Funcionário por ID (ex: ID 1 - Carla)
 GET http://localhost:3000/funcionarios/1
 
-### Atualizar Funcionário (substitua 1 pelo ID desejado)
+### Atualizar Funcionário (ex: ID 1 - Carla)
 PUT http://localhost:3000/funcionarios/1
 Content-Type: application/json
 
 {
-  "cargo": "Médico Especialista",
-  "salario": 9200.00,
-  "email": "c.pereira.md@email.com"
+  "cargoId": 1, 
+  "salario": 3300.00,
+  "telefone": "41977778889"
 }
 
-### Deletar Funcionário (substitua 1 pelo ID desejado)
-DELETE http://localhost:3000/funcionarios/1
+### Deletar Funcionário (ex: ID 2 - Roberto)
+# CUIDADO: Verifique dependências (atendimentos, movimentações de estoque).
+DELETE http://localhost:3000/funcionarios/2

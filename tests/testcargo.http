@@ -1,0 +1,43 @@
+### =======================================
+###           MÓDULO: CARGOS
+### =======================================
+# NOTA: Substitua os IDs de exemplo pelos IDs REAIS do seu banco.
+
+### Criar Novo Cargo: Atendente
+POST http://localhost:3000/cargos
+Content-Type: application/json
+
+{
+  "nomeCargo": "Atendente de Clínica",
+  "descricao": "Responsável pelo atendimento ao paciente, agendamentos e recepção."
+}
+# Guarde o ID do cargo (ex: 1)
+
+### Criar Novo Cargo: Técnico de Enfermagem
+POST http://localhost:3000/cargos
+Content-Type: application/json
+
+{
+  "nomeCargo": "Técnico de Enfermagem",
+  "descricao": "Auxilia médicos e enfermeiros em procedimentos e cuidados."
+}
+# Guarde o ID do cargo (ex: 2)
+
+### Listar Todos os Cargos
+GET http://localhost:3000/cargos
+
+### Buscar Cargo por ID (ex: ID 1 - Atendente)
+GET http://localhost:3000/cargos/1
+
+### Atualizar Cargo (ex: ID 1 - Atendente)
+PUT http://localhost:3000/cargos/1
+Content-Type: application/json
+
+{
+  "nomeCargo": "Atendente de Clínica Sênior",
+  "descricao": "Responsável pelo atendimento, agendamentos, recepção e suporte administrativo."
+}
+
+### Deletar Cargo (ex: ID 2 - Técnico)
+# CUIDADO: Verifique se há funcionários associados a este cargo.
+DELETE http://localhost:3000/cargos/2
