@@ -12,6 +12,7 @@
 - [Diagrama BPMN do Processo de Agendamento](#-diagrama-bpmn-do-processo-de-agendamento)
 - [Tecnologias Utilizadas](#️-tecnologias-utilizadas)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
+
 ---
 
 ## 📌 Funcionalidades Implementadas
@@ -78,6 +79,7 @@
 **RF18:** O sistema deve registrar qual funcionário realizou o cadastro de entidades como Exames, Materiais, Pacientes, Atendimentos, Fornecedores, Categorias de Despesa e Contas a Pagar.
 **RF19:** O sistema deve fornecer relatórios de: Baixo Estoque de Materiais e Materiais Próximos ao Vencimento.
 **RF20:** O sistema deve fornecer relatórios contábeis de: Fluxo de Caixa, Contas a Receber (Aging), Contas a Pagar (Aging), DRE Simplificado, Faturamento por Exame, Despesas por Categoria.
+
 ---
 
 ## ⚙️ Requisitos Não Funcionais
@@ -90,14 +92,13 @@
 **RNF06:** Informações sensíveis (como senhas de banco de dados) devem ser gerenciadas através de variáveis de ambiente em produção.
 **RNF07:** O código-fonte deve ser modular e bem organizado para facilitar a manutenção e escalabilidade.
 
-
 ---
 
 ## 🌊 Diagrama BPMN do Processo de Agendamento
 
 ![Diagrama BPMN Principal](bpmn/bpmn.png)
 
-
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -166,3 +167,5 @@ C-Medic/
 ├── package.json
 └── README.md             # Esta documentação
 ```
+
+---
