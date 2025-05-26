@@ -56,7 +56,6 @@
 - Fluxo de caixa, aging list, DRE simplificado, faturamento e despesas por categoria.
 
 ---
-
 ## 📋 Requisitos Funcionais
 
 - **RF01:** O sistema deve permitir o cadastro, consulta, atualização e exclusão de Pacientes.
@@ -116,7 +115,6 @@
 - **RNF06:** Informações sensíveis (como senhas de banco de dados) devem ser gerenciadas através de variáveis de ambiente em produção.
 
 - **RNF07:** O código-fonte deve ser modular e bem organizado para facilitar a manutenção e escalabilidade.
-
 
 ---
 
