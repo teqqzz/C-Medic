@@ -11,35 +11,63 @@
     <bpmn:messageFlow id="Flow_SolicitacaoRelatorios" name="Gerar Relatórios" sourceRef="Task_SelecionarOpcaoRelatorios" targetRef="StartEvent_ModuloRelatorios" />
   </bpmn:collaboration>
   <bpmn:process id="Process_InteracaoUtilizador" name="Interação do Utilizador" isExecutable="false">
-    <bpmn:startEvent id="StartEvent_UtilizadorInicia" name="Utilizador Acede ao Sistema" />
+    <bpmn:exclusiveGateway id="Gateway_EscolhaModulo" />
+    <bpmn:task id="Task_SelecionarOpcaoAgendamento" name="Agendamentos" />
     <bpmn:task id="Task_EscolherAcao" name="Utilizador Escolhe Ação Principal" />
-    <bpmn:exclusiveGateway id="Gateway_EscolhaModulo" name="Qual Módulo Aceder?" />
+    <bpmn:startEvent id="StartEvent_UtilizadorInicia" name="Inicio" />
+    <bpmn:task id="Task_SelecionarOpcaoPacientes" name="Pacientes" />
+    <bpmn:endEvent id="EndEvent_UtilizadorFinaliza" name="Fim" />
+    <bpmn:task id="Task_SelecionarOpcaoRelatorios" name="Relatórios" />
+    <bpmn:task id="Task_SelecionarOpcaoAtendimento" name="Atendimentos" />
+    <bpmn:task id="Task_SelecionarOpcaoFinanceiro" name="Financeiro" />
     <bpmn:task id="Task_SelecionarOpcaoCadastros" name="Cadastros Gerais" />
-    <bpmn:endEvent id="EndEvent_UtilizadorFinaliza" name="Utilizador Sai/Finaliza Ação" />
-    <bpmn:sequenceFlow id="Flow_InicioParaEscolha" sourceRef="StartEvent_UtilizadorInicia" targetRef="Task_EscolherAcao" />
     <bpmn:sequenceFlow id="Flow_EscolhaParaGateway" sourceRef="Task_EscolherAcao" targetRef="Gateway_EscolhaModulo" />
-    <bpmn:sequenceFlow id="Flow_ParaAgendamentos" name="Agendamentos" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoAgendamento" />
-    <bpmn:sequenceFlow id="Flow_ParaPacientes" name="Pacientes" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoPacientes" />
-    <bpmn:sequenceFlow id="Flow_ParaCadastros" name="Cadastros" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoCadastros" />
+    <bpmn:sequenceFlow id="Flow_ParaAgendamentos" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoAgendamento" />
+    <bpmn:sequenceFlow id="Flow_ParaPacientes" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoPacientes" />
+    <bpmn:sequenceFlow id="Flow_ParaCadastros" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoCadastros" />
     <bpmn:sequenceFlow id="Flow_ParaAtendimento" name="Atendimentos" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoAtendimento" />
-    <bpmn:sequenceFlow id="Flow_ParaFinanceiro" name="Financeiro" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoFinanceiro" />
+    <bpmn:sequenceFlow id="Flow_ParaFinanceiro" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoFinanceiro" />
     <bpmn:sequenceFlow id="Flow_ParaRelatorios" name="Relatórios" sourceRef="Gateway_EscolhaModulo" targetRef="Task_SelecionarOpcaoRelatorios" />
     <bpmn:sequenceFlow id="Flow_AgendamentoParaFim" sourceRef="Task_SelecionarOpcaoAgendamento" targetRef="EndEvent_UtilizadorFinaliza" />
+    <bpmn:sequenceFlow id="Flow_InicioParaEscolha" sourceRef="StartEvent_UtilizadorInicia" targetRef="Task_EscolherAcao" />
     <bpmn:sequenceFlow id="Flow_PacientesParaFim" sourceRef="Task_SelecionarOpcaoPacientes" targetRef="EndEvent_UtilizadorFinaliza" />
     <bpmn:sequenceFlow id="Flow_CadastrosParaFim" sourceRef="Task_SelecionarOpcaoCadastros" targetRef="EndEvent_UtilizadorFinaliza" />
     <bpmn:sequenceFlow id="Flow_AtendimentoParaFim" sourceRef="Task_SelecionarOpcaoAtendimento" targetRef="EndEvent_UtilizadorFinaliza" />
     <bpmn:sequenceFlow id="Flow_FinanceiroParaFim" sourceRef="Task_SelecionarOpcaoFinanceiro" targetRef="EndEvent_UtilizadorFinaliza" />
     <bpmn:sequenceFlow id="Flow_RelatoriosParaFim" sourceRef="Task_SelecionarOpcaoRelatorios" targetRef="EndEvent_UtilizadorFinaliza" />
-    <bpmn:task id="Task_SelecionarOpcaoAgendamento" name="Agendamentos" />
-    <bpmn:task id="Task_SelecionarOpcaoPacientes" name="Pacientes" />
-    <bpmn:task id="Task_SelecionarOpcaoRelatorios" name="Relatórios" />
-    <bpmn:task id="Task_SelecionarOpcaoFinanceiro" name="Financeiro" />
-    <bpmn:task id="Task_SelecionarOpcaoAtendimento" name="Atendimentos" />
   </bpmn:process>
   <bpmn:process id="Process_ModulosSistema" name="Módulos do Sistema da Clínica" isExecutable="false">
+    <bpmn:endEvent id="EndEvent_ModuloAtendimento" name="Resposta de Atendimento Enviada" />
+    <bpmn:endEvent id="EndEvent_ModuloRelatorios" name="Relatório Gerado e Enviado" />
+    <bpmn:startEvent id="StartEvent_ModuloRelatorios" name="Receber Solicitação de Relatório">
+      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoRelatorios" />
+    </bpmn:startEvent>
+    <bpmn:startEvent id="StartEvent_ModuloAtendimento" name="Receber Solicitação de Atendimento">
+      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoAtendimento" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_ModuloFinanceiro" name="Resposta de Gestão Financeira Enviada" />
+    <bpmn:startEvent id="StartEvent_ModuloFinanceiro" name="Receber Solicitação de Gestão Financeira">
+      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoFinanceiro" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_ModuloPacientes" name="Resposta de Gestão de Pacientes Enviada" />
+    <bpmn:startEvent id="StartEvent_ModuloPacientes" name="Receber Solicitação de Gestão de Pacientes">
+      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoPacientes" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_ModuloCadastros" name="Resposta de Gestão de Cadastros Enviada" />
+    <bpmn:startEvent id="StartEvent_ModuloCadastros" name="Receber Solicitação de Gestão de Cadastros">
+      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoCadastros" />
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_ModuloAgendamento" name="Resposta de Agendamento Enviada" />
     <bpmn:startEvent id="StartEvent_ModuloAgendamento" name="Receber Solicitação de Agendamento">
       <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoAgendamento" />
     </bpmn:startEvent>
+    <bpmn:subProcess id="SubProcess_GerarRelatorios" name="Gerar Relatórios Contábeis/Gerenciais">
+      <bpmn:outgoing>Flow_FimModuloRelatorios</bpmn:outgoing>
+    </bpmn:subProcess>
+    <bpmn:subProcess id="SubProcess_RealizarAtendimento" name="Realizar Atendimento e Gerar Cobrança" />
+    <bpmn:subProcess id="SubProcess_GerenciarFinanceiro" name="Gerenciar Contas a Pagar e Receber" />
+    <bpmn:subProcess id="SubProcess_GerenciarPacientes" name="Gerenciar Pacientes (CRUD)" />
+    <bpmn:subProcess id="SubProcess_GerenciarCadastros" name="Gerenciar Cadastros Gerais (CRUD)" />
     <bpmn:subProcess id="SubProcess_GerenciarAgendamentos" name="Gerenciar Agendamentos">
       <bpmn:incoming>Flow_InicioModuloAgendamento</bpmn:incoming>
       <bpmn:outgoing>Flow_FimModuloAgendamento</bpmn:outgoing>
@@ -49,44 +77,18 @@
       <bpmn:sequenceFlow id="Flow_SubAg_1" sourceRef="StartSubAgendamento" targetRef="Task_LogicaAgendamento" />
       <bpmn:sequenceFlow id="Flow_SubAg_2" sourceRef="Task_LogicaAgendamento" targetRef="EndSubAgendamento" />
     </bpmn:subProcess>
-    <bpmn:endEvent id="EndEvent_ModuloAgendamento" name="Resposta de Agendamento Enviada" />
-    <bpmn:sequenceFlow id="Flow_InicioModuloAgendamento" sourceRef="StartEvent_ModuloAgendamento" targetRef="SubProcess_GerenciarAgendamentos" />
-    <bpmn:sequenceFlow id="Flow_FimModuloAgendamento" sourceRef="SubProcess_GerenciarAgendamentos" targetRef="EndEvent_ModuloAgendamento" />
-    <bpmn:startEvent id="StartEvent_ModuloPacientes" name="Receber Solicitação de Gestão de Pacientes">
-      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoPacientes" />
-    </bpmn:startEvent>
-    <bpmn:subProcess id="SubProcess_GerenciarPacientes" name="Gerenciar Pacientes (CRUD)" />
-    <bpmn:endEvent id="EndEvent_ModuloPacientes" name="Resposta de Gestão de Pacientes Enviada" />
-    <bpmn:sequenceFlow id="Flow_InicioModuloPacientes" sourceRef="StartEvent_ModuloPacientes" targetRef="SubProcess_GerenciarPacientes" />
-    <bpmn:sequenceFlow id="Flow_FimModuloPacientes" sourceRef="SubProcess_GerenciarPacientes" targetRef="EndEvent_ModuloPacientes" />
-    <bpmn:startEvent id="StartEvent_ModuloCadastros" name="Receber Solicitação de Gestão de Cadastros">
-      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoCadastros" />
-    </bpmn:startEvent>
-    <bpmn:subProcess id="SubProcess_GerenciarCadastros" name="Gerenciar Cadastros Gerais (CRUD)" />
-    <bpmn:endEvent id="EndEvent_ModuloCadastros" name="Resposta de Gestão de Cadastros Enviada" />
-    <bpmn:sequenceFlow id="Flow_InicioModuloCadastros" sourceRef="StartEvent_ModuloCadastros" targetRef="SubProcess_GerenciarCadastros" />
-    <bpmn:sequenceFlow id="Flow_FimModuloCadastros" sourceRef="SubProcess_GerenciarCadastros" targetRef="EndEvent_ModuloCadastros" />
-    <bpmn:startEvent id="StartEvent_ModuloAtendimento" name="Receber Solicitação de Atendimento">
-      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoAtendimento" />
-    </bpmn:startEvent>
-    <bpmn:subProcess id="SubProcess_RealizarAtendimento" name="Realizar Atendimento e Gerar Cobrança" />
-    <bpmn:endEvent id="EndEvent_ModuloAtendimento" name="Resposta de Atendimento Enviada" />
-    <bpmn:sequenceFlow id="Flow_InicioModuloAtendimento" sourceRef="StartEvent_ModuloAtendimento" targetRef="SubProcess_RealizarAtendimento" />
     <bpmn:sequenceFlow id="Flow_FimModuloAtendimento" sourceRef="SubProcess_RealizarAtendimento" targetRef="EndEvent_ModuloAtendimento" />
-    <bpmn:startEvent id="StartEvent_ModuloFinanceiro" name="Receber Solicitação de Gestão Financeira">
-      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoFinanceiro" />
-    </bpmn:startEvent>
-    <bpmn:subProcess id="SubProcess_GerenciarFinanceiro" name="Gerenciar Contas a Pagar e Receber" />
-    <bpmn:endEvent id="EndEvent_ModuloFinanceiro" name="Resposta de Gestão Financeira Enviada" />
-    <bpmn:sequenceFlow id="Flow_InicioModuloFinanceiro" sourceRef="StartEvent_ModuloFinanceiro" targetRef="SubProcess_GerenciarFinanceiro" />
-    <bpmn:sequenceFlow id="Flow_FimModuloFinanceiro" sourceRef="SubProcess_GerenciarFinanceiro" targetRef="EndEvent_ModuloFinanceiro" />
-    <bpmn:startEvent id="StartEvent_ModuloRelatorios" name="Receber Solicitação de Relatório">
-      <bpmn:messageEventDefinition messageRef="Msg_SolicitacaoRelatorios" />
-    </bpmn:startEvent>
-    <bpmn:subProcess id="SubProcess_GerarRelatorios" name="Gerar Relatórios Contábeis/Gerenciais" />
-    <bpmn:endEvent id="EndEvent_ModuloRelatorios" name="Relatório Gerado e Enviado" />
-    <bpmn:sequenceFlow id="Flow_InicioModuloRelatorios" sourceRef="StartEvent_ModuloRelatorios" targetRef="SubProcess_GerarRelatorios" />
     <bpmn:sequenceFlow id="Flow_FimModuloRelatorios" sourceRef="SubProcess_GerarRelatorios" targetRef="EndEvent_ModuloRelatorios" />
+    <bpmn:sequenceFlow id="Flow_InicioModuloRelatorios" sourceRef="StartEvent_ModuloRelatorios" targetRef="SubProcess_GerarRelatorios" />
+    <bpmn:sequenceFlow id="Flow_InicioModuloAtendimento" sourceRef="StartEvent_ModuloAtendimento" targetRef="SubProcess_RealizarAtendimento" />
+    <bpmn:sequenceFlow id="Flow_FimModuloFinanceiro" sourceRef="SubProcess_GerenciarFinanceiro" targetRef="EndEvent_ModuloFinanceiro" />
+    <bpmn:sequenceFlow id="Flow_InicioModuloFinanceiro" sourceRef="StartEvent_ModuloFinanceiro" targetRef="SubProcess_GerenciarFinanceiro" />
+    <bpmn:sequenceFlow id="Flow_FimModuloPacientes" sourceRef="SubProcess_GerenciarPacientes" targetRef="EndEvent_ModuloPacientes" />
+    <bpmn:sequenceFlow id="Flow_InicioModuloPacientes" sourceRef="StartEvent_ModuloPacientes" targetRef="SubProcess_GerenciarPacientes" />
+    <bpmn:sequenceFlow id="Flow_FimModuloCadastros" sourceRef="SubProcess_GerenciarCadastros" targetRef="EndEvent_ModuloCadastros" />
+    <bpmn:sequenceFlow id="Flow_InicioModuloCadastros" sourceRef="StartEvent_ModuloCadastros" targetRef="SubProcess_GerenciarCadastros" />
+    <bpmn:sequenceFlow id="Flow_FimModuloAgendamento" sourceRef="SubProcess_GerenciarAgendamentos" targetRef="EndEvent_ModuloAgendamento" />
+    <bpmn:sequenceFlow id="Flow_InicioModuloAgendamento" sourceRef="StartEvent_ModuloAgendamento" targetRef="SubProcess_GerenciarAgendamentos" />
   </bpmn:process>
   <bpmn:message id="Msg_SolicitacaoAgendamento" name="SolicitacaoAgendamento" />
   <bpmn:message id="Msg_SolicitacaoPacientes" name="SolicitacaoPacientes" />
@@ -97,306 +99,325 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_VisaoGeral">
     <bpmndi:BPMNPlane id="BPMNPlane_VisaoGeral" bpmnElement="Collaboration_VisaoGeral">
       <bpmndi:BPMNShape id="Participant_Utilizador_di" bpmnElement="Participant_Utilizador" isHorizontal="true">
-        <dc:Bounds x="160" y="40" width="1000" height="290" />
+        <dc:Bounds x="160" y="80" width="1328" height="430" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_UtilizadorInicia_di" bpmnElement="StartEvent_UtilizadorInicia">
-        <dc:Bounds x="222" y="182" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="204" y="225" width="72" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_EscolherAcao_di" bpmnElement="Task_EscolherAcao">
-        <dc:Bounds x="310" y="160" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_EscolhaModulo_di" bpmnElement="Gateway_EscolhaModulo" isMarkerVisible="true">
-        <dc:Bounds x="465" y="175" width="50" height="50" />
+        <dc:Bounds x="465" y="355" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="509.5" y="166" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_SelecionarOpcaoCadastros_di" bpmnElement="Task_SelecionarOpcaoCadastros">
-        <dc:Bounds x="570" y="200" width="100" height="40" />
+      <bpmndi:BPMNShape id="Task_SelecionarOpcaoAgendamento_di" bpmnElement="Task_SelecionarOpcaoAgendamento">
+        <dc:Bounds x="390" y="110" width="100" height="40" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_SelecionarOpcaoFinanceiro_di" bpmnElement="Task_SelecionarOpcaoFinanceiro">
-        <dc:Bounds x="700" y="150" width="100" height="40" />
+      <bpmndi:BPMNShape id="Task_EscolherAcao_di" bpmnElement="Task_EscolherAcao">
+        <dc:Bounds x="270" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_UtilizadorFinaliza_di" bpmnElement="EndEvent_UtilizadorFinaliza">
-        <dc:Bounds x="862" y="182" width="36" height="36" />
+      <bpmndi:BPMNShape id="StartEvent_UtilizadorInicia_di" bpmnElement="StartEvent_UtilizadorInicia">
+        <dc:Bounds x="202" y="292" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="767.5" y="186" width="85" height="27" />
+          <dc:Bounds x="207" y="335" width="26" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_SelecionarOpcaoAgendamento_di" bpmnElement="Task_SelecionarOpcaoAgendamento">
-        <dc:Bounds x="560" y="60" width="100" height="40" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_SelecionarOpcaoPacientes_di" bpmnElement="Task_SelecionarOpcaoPacientes">
-        <dc:Bounds x="570" y="130" width="100" height="40" />
+        <dc:Bounds x="670" y="250" width="100" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_UtilizadorFinaliza_di" bpmnElement="EndEvent_UtilizadorFinaliza">
+        <dc:Bounds x="1422" y="285" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1467.5" y="296" width="19" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_SelecionarOpcaoRelatorios_di" bpmnElement="Task_SelecionarOpcaoRelatorios">
-        <dc:Bounds x="770" y="250" width="100" height="40" />
+        <dc:Bounds x="1210" y="440" width="100" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_SelecionarOpcaoAtendimento_di" bpmnElement="Task_SelecionarOpcaoAtendimento">
-        <dc:Bounds x="700" y="90" width="100" height="40" />
+        <dc:Bounds x="930" y="170" width="100" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SelecionarOpcaoFinanceiro_di" bpmnElement="Task_SelecionarOpcaoFinanceiro">
+        <dc:Bounds x="840" y="342" width="100" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SelecionarOpcaoCadastros_di" bpmnElement="Task_SelecionarOpcaoCadastros">
+        <dc:Bounds x="540" y="380" width="100" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_InicioParaEscolha_di" bpmnElement="Flow_InicioParaEscolha">
-        <di:waypoint x="258" y="200" />
-        <di:waypoint x="310" y="200" />
+        <di:waypoint x="238" y="310" />
+        <di:waypoint x="270" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_EscolhaParaGateway_di" bpmnElement="Flow_EscolhaParaGateway">
-        <di:waypoint x="410" y="200" />
-        <di:waypoint x="465" y="200" />
+        <di:waypoint x="370" y="342" />
+        <di:waypoint x="430" y="380" />
+        <di:waypoint x="465" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_ParaAgendamentos_di" bpmnElement="Flow_ParaAgendamentos">
-        <di:waypoint x="490" y="175" />
-        <di:waypoint x="490" y="80" />
-        <di:waypoint x="560" y="80" />
+        <di:waypoint x="476" y="369" />
+        <di:waypoint x="440" y="340" />
+        <di:waypoint x="440" y="150" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="488" y="55" width="74" height="14" />
+          <dc:Bounds x="293" y="108" width="74" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_ParaPacientes_di" bpmnElement="Flow_ParaPacientes">
-        <di:waypoint x="476" y="189" />
-        <di:waypoint x="440" y="123" />
-        <di:waypoint x="570" y="123" />
+        <di:waypoint x="507" y="372" />
+        <di:waypoint x="570" y="295" />
+        <di:waypoint x="670" y="263" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="425" y="103" width="49" height="14" />
+          <dc:Bounds x="545" y="123" width="49" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_ParaCadastros_di" bpmnElement="Flow_ParaCadastros">
-        <di:waypoint x="490" y="225" />
-        <di:waypoint x="490" y="250" />
-        <di:waypoint x="620" y="250" />
-        <di:waypoint x="620" y="240" />
+        <di:waypoint x="505" y="390" />
+        <di:waypoint x="520" y="400" />
+        <di:waypoint x="540" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="514" y="256" width="51" height="14" />
+          <dc:Bounds x="504" y="213" width="51" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_ParaAtendimento_di" bpmnElement="Flow_ParaAtendimento">
-        <di:waypoint x="493" y="178" />
-        <di:waypoint x="580" y="110" />
-        <di:waypoint x="700" y="110" />
+        <di:waypoint x="490" y="355" />
+        <di:waypoint x="490" y="190" />
+        <di:waypoint x="930" y="190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="716" y="43" width="67" height="14" />
+          <dc:Bounds x="676" y="173" width="67" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_ParaFinanceiro_di" bpmnElement="Flow_ParaFinanceiro">
-        <di:waypoint x="515" y="200" />
-        <di:waypoint x="700" y="170" />
+        <di:waypoint x="514" y="379" />
+        <di:waypoint x="623" y="354" />
+        <di:waypoint x="840" y="354" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="599" y="175" width="52" height="14" />
+          <dc:Bounds x="661" y="175" width="52" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_ParaRelatorios_di" bpmnElement="Flow_ParaRelatorios">
-        <di:waypoint x="513" y="202" />
-        <di:waypoint x="600" y="280" />
-        <di:waypoint x="770" y="272" />
+        <di:waypoint x="490" y="405" />
+        <di:waypoint x="490" y="460" />
+        <di:waypoint x="1210" y="460" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="530" y="273" width="51" height="14" />
+          <dc:Bounds x="784" y="438" width="51" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_AgendamentoParaFim_di" bpmnElement="Flow_AgendamentoParaFim">
-        <di:waypoint x="660" y="80" />
-        <di:waypoint x="920" y="80" />
-        <di:waypoint x="920" y="200" />
-        <di:waypoint x="898" y="200" />
+        <di:waypoint x="490" y="130" />
+        <di:waypoint x="1440" y="130" />
+        <di:waypoint x="1440" y="285" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_PacientesParaFim_di" bpmnElement="Flow_PacientesParaFim">
-        <di:waypoint x="670" y="142" />
-        <di:waypoint x="840" y="150" />
-        <di:waypoint x="868" y="187" />
+        <di:waypoint x="770" y="260" />
+        <di:waypoint x="1110" y="260" />
+        <di:waypoint x="1422" y="302" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_CadastrosParaFim_di" bpmnElement="Flow_CadastrosParaFim">
-        <di:waypoint x="670" y="220" />
-        <di:waypoint x="860" y="220" />
-        <di:waypoint x="867" y="213" />
+        <di:waypoint x="640" y="400" />
+        <di:waypoint x="860" y="400" />
+        <di:waypoint x="1430" y="350" />
+        <di:waypoint x="1430" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_AtendimentoParaFim_di" bpmnElement="Flow_AtendimentoParaFim">
-        <di:waypoint x="800" y="121" />
-        <di:waypoint x="880" y="140" />
-        <di:waypoint x="880" y="182" />
+        <di:waypoint x="1030" y="189" />
+        <di:waypoint x="1226" y="189" />
+        <di:waypoint x="1310" y="210" />
+        <di:waypoint x="1434" y="286" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_FinanceiroParaFim_di" bpmnElement="Flow_FinanceiroParaFim">
-        <di:waypoint x="800" y="170" />
-        <di:waypoint x="840" y="170" />
-        <di:waypoint x="860" y="200" />
+        <di:waypoint x="940" y="351" />
+        <di:waypoint x="990" y="340" />
+        <di:waypoint x="1070" y="340" />
+        <di:waypoint x="1424" y="311" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_RelatoriosParaFim_di" bpmnElement="Flow_RelatoriosParaFim">
-        <di:waypoint x="820" y="250" />
-        <di:waypoint x="820" y="234" />
-        <di:waypoint x="880" y="234" />
-        <di:waypoint x="880" y="218" />
+        <di:waypoint x="1310" y="460" />
+        <di:waypoint x="1350" y="460" />
+        <di:waypoint x="1460" y="360" />
+        <di:waypoint x="1446" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_SistemaClinica_di" bpmnElement="Participant_SistemaClinica" isHorizontal="true">
-        <dc:Bounds x="160" y="360" width="1000" height="450" />
+        <dc:Bounds x="160" y="510" width="1328" height="480" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_ModuloAgendamento_di" bpmnElement="StartEvent_ModuloAgendamento">
-        <dc:Bounds x="222" y="402" width="36" height="36" />
+      <bpmndi:BPMNShape id="EndEvent_ModuloAtendimento_di" bpmnElement="EndEvent_ModuloAtendimento">
+        <dc:Bounds x="1142" y="582" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="200" y="445" width="80" height="40" />
+          <dc:Bounds x="1129" y="618" width="62" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SubProcess_GerenciarAgendamentos_di" bpmnElement="SubProcess_GerenciarAgendamentos" isExpanded="false">
-        <dc:Bounds x="310" y="380" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_ModuloAgendamento_di" bpmnElement="EndEvent_ModuloAgendamento">
-        <dc:Bounds x="462" y="402" width="36" height="36" />
+      <bpmndi:BPMNShape id="EndEvent_ModuloRelatorios_di" bpmnElement="EndEvent_ModuloRelatorios">
+        <dc:Bounds x="1422" y="762" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="440" y="445" width="80" height="40" />
+          <dc:Bounds x="1398" y="798" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_ModuloRelatorios_di" bpmnElement="StartEvent_ModuloRelatorios">
+        <dc:Bounds x="1232" y="762" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1216" y="798" width="69" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_ModuloAtendimento_di" bpmnElement="StartEvent_ModuloAtendimento">
+        <dc:Bounds x="962" y="582" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="946" y="618" width="69" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_ModuloFinanceiro_di" bpmnElement="EndEvent_ModuloFinanceiro">
+        <dc:Bounds x="1152" y="872" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1139" y="908" width="62" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_ModuloFinanceiro_di" bpmnElement="StartEvent_ModuloFinanceiro">
+        <dc:Bounds x="872" y="872" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="845" y="918" width="90" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_ModuloPacientes_di" bpmnElement="EndEvent_ModuloPacientes">
+        <dc:Bounds x="832" y="672" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="819" y="708" width="62" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_ModuloPacientes_di" bpmnElement="StartEvent_ModuloPacientes">
-        <dc:Bounds x="222" y="492" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SubProcess_GerenciarPacientes_di" bpmnElement="SubProcess_GerenciarPacientes" isExpanded="false">
-        <dc:Bounds x="310" y="470" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_ModuloPacientes_di" bpmnElement="EndEvent_ModuloPacientes">
-        <dc:Bounds x="462" y="492" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_ModuloCadastros_di" bpmnElement="StartEvent_ModuloCadastros">
-        <dc:Bounds x="222" y="582" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SubProcess_GerenciarCadastros_di" bpmnElement="SubProcess_GerenciarCadastros" isExpanded="false">
-        <dc:Bounds x="310" y="560" width="100" height="80" />
+        <dc:Bounds x="662" y="672" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="646" y="708" width="69" height="53" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_ModuloCadastros_di" bpmnElement="EndEvent_ModuloCadastros">
-        <dc:Bounds x="462" y="582" width="36" height="36" />
+        <dc:Bounds x="792" y="842" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="779" y="878" width="62" height="53" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_ModuloAtendimento_di" bpmnElement="StartEvent_ModuloAtendimento">
-        <dc:Bounds x="572" y="402" width="36" height="36" />
+      <bpmndi:BPMNShape id="StartEvent_ModuloCadastros_di" bpmnElement="StartEvent_ModuloCadastros">
+        <dc:Bounds x="552" y="842" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="536" y="878" width="69" height="53" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SubProcess_RealizarAtendimento_di" bpmnElement="SubProcess_RealizarAtendimento" isExpanded="false">
-        <dc:Bounds x="660" y="380" width="100" height="80" />
+      <bpmndi:BPMNShape id="EndEvent_ModuloAgendamento_di" bpmnElement="EndEvent_ModuloAgendamento">
+        <dc:Bounds x="482" y="582" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="466" y="625" width="68" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_ModuloAtendimento_di" bpmnElement="EndEvent_ModuloAtendimento">
-        <dc:Bounds x="812" y="402" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_ModuloFinanceiro_di" bpmnElement="StartEvent_ModuloFinanceiro">
-        <dc:Bounds x="572" y="492" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SubProcess_GerenciarFinanceiro_di" bpmnElement="SubProcess_GerenciarFinanceiro" isExpanded="false">
-        <dc:Bounds x="660" y="470" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_ModuloFinanceiro_di" bpmnElement="EndEvent_ModuloFinanceiro">
-        <dc:Bounds x="812" y="492" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_ModuloRelatorios_di" bpmnElement="StartEvent_ModuloRelatorios">
-        <dc:Bounds x="572" y="582" width="36" height="36" />
+      <bpmndi:BPMNShape id="StartEvent_ModuloAgendamento_di" bpmnElement="StartEvent_ModuloAgendamento">
+        <dc:Bounds x="292" y="582" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="276" y="625" width="69" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SubProcess_GerarRelatorios_di" bpmnElement="SubProcess_GerarRelatorios" isExpanded="false">
-        <dc:Bounds x="660" y="560" width="100" height="80" />
+        <dc:Bounds x="1290" y="740" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_ModuloRelatorios_di" bpmnElement="EndEvent_ModuloRelatorios">
-        <dc:Bounds x="812" y="582" width="36" height="36" />
+      <bpmndi:BPMNShape id="SubProcess_RealizarAtendimento_di" bpmnElement="SubProcess_RealizarAtendimento" isExpanded="false">
+        <dc:Bounds x="1020" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_GerenciarFinanceiro_di" bpmnElement="SubProcess_GerenciarFinanceiro" isExpanded="false">
+        <dc:Bounds x="930" y="850" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_GerenciarPacientes_di" bpmnElement="SubProcess_GerenciarPacientes" isExpanded="false">
+        <dc:Bounds x="720" y="650" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_GerenciarCadastros_di" bpmnElement="SubProcess_GerenciarCadastros" isExpanded="false">
+        <dc:Bounds x="610" y="820" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_GerenciarAgendamentos_di" bpmnElement="SubProcess_GerenciarAgendamentos" isExpanded="false">
+        <dc:Bounds x="350" y="560" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_InicioModuloAgendamento_di" bpmnElement="Flow_InicioModuloAgendamento">
-        <di:waypoint x="258" y="420" />
-        <di:waypoint x="310" y="420" />
+        <di:waypoint x="328" y="600" />
+        <di:waypoint x="350" y="600" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_FimModuloAgendamento_di" bpmnElement="Flow_FimModuloAgendamento">
-        <di:waypoint x="410" y="420" />
-        <di:waypoint x="462" y="420" />
+        <di:waypoint x="450" y="600" />
+        <di:waypoint x="482" y="600" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_InicioModuloPacientes_di" bpmnElement="Flow_InicioModuloPacientes">
-        <di:waypoint x="258" y="510" />
-        <di:waypoint x="310" y="510" />
+        <di:waypoint x="698" y="690" />
+        <di:waypoint x="720" y="690" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_FimModuloPacientes_di" bpmnElement="Flow_FimModuloPacientes">
-        <di:waypoint x="410" y="510" />
-        <di:waypoint x="462" y="510" />
+        <di:waypoint x="770" y="650" />
+        <di:waypoint x="770" y="630" />
+        <di:waypoint x="850" y="630" />
+        <di:waypoint x="850" y="672" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_InicioModuloCadastros_di" bpmnElement="Flow_InicioModuloCadastros">
-        <di:waypoint x="258" y="600" />
-        <di:waypoint x="310" y="600" />
+        <di:waypoint x="588" y="860" />
+        <di:waypoint x="610" y="860" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_FimModuloCadastros_di" bpmnElement="Flow_FimModuloCadastros">
-        <di:waypoint x="410" y="600" />
-        <di:waypoint x="462" y="600" />
+        <di:waypoint x="710" y="860" />
+        <di:waypoint x="792" y="860" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_InicioModuloAtendimento_di" bpmnElement="Flow_InicioModuloAtendimento">
-        <di:waypoint x="608" y="420" />
-        <di:waypoint x="660" y="420" />
+        <di:waypoint x="998" y="600" />
+        <di:waypoint x="1020" y="600" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_FimModuloAtendimento_di" bpmnElement="Flow_FimModuloAtendimento">
-        <di:waypoint x="760" y="420" />
-        <di:waypoint x="812" y="420" />
+        <di:waypoint x="1120" y="600" />
+        <di:waypoint x="1142" y="600" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_InicioModuloFinanceiro_di" bpmnElement="Flow_InicioModuloFinanceiro">
-        <di:waypoint x="608" y="510" />
-        <di:waypoint x="660" y="510" />
+        <di:waypoint x="908" y="890" />
+        <di:waypoint x="930" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_FimModuloFinanceiro_di" bpmnElement="Flow_FimModuloFinanceiro">
-        <di:waypoint x="760" y="510" />
-        <di:waypoint x="812" y="510" />
+        <di:waypoint x="1030" y="890" />
+        <di:waypoint x="1152" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_InicioModuloRelatorios_di" bpmnElement="Flow_InicioModuloRelatorios">
-        <di:waypoint x="608" y="600" />
-        <di:waypoint x="660" y="600" />
+        <di:waypoint x="1268" y="780" />
+        <di:waypoint x="1290" y="780" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_FimModuloRelatorios_di" bpmnElement="Flow_FimModuloRelatorios">
-        <di:waypoint x="760" y="600" />
-        <di:waypoint x="812" y="600" />
+        <di:waypoint x="1390" y="780" />
+        <di:waypoint x="1422" y="780" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_SolicitacaoAgendamento_di" bpmnElement="Flow_SolicitacaoAgendamento">
-        <di:waypoint x="572" y="100" />
-        <di:waypoint x="420" y="180" />
-        <di:waypoint x="470" y="280" />
-        <di:waypoint x="240" y="280" />
-        <di:waypoint x="240" y="402" />
+        <di:waypoint x="400" y="150" />
+        <di:waypoint x="400" y="460" />
+        <di:waypoint x="200" y="600" />
+        <di:waypoint x="292" y="600" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="321" y="270" width="68" height="27" />
+          <dc:Bounds x="396" y="466" width="68" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_SolicitacaoPacientes_di" bpmnElement="Flow_SolicitacaoPacientes">
-        <di:waypoint x="670" y="130" />
-        <di:waypoint x="690" y="130" />
-        <di:waypoint x="750" y="320" />
-        <di:waypoint x="240" y="320" />
-        <di:waypoint x="240" y="492" />
+        <di:waypoint x="680" y="290" />
+        <di:waypoint x="680" y="672" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="457" y="310" width="77" height="14" />
+          <dc:Bounds x="582" y="464" width="77" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_SolicitacaoCadastros_di" bpmnElement="Flow_SolicitacaoCadastros">
-        <di:waypoint x="650" y="240" />
-        <di:waypoint x="600" y="370" />
-        <di:waypoint x="240" y="370" />
-        <di:waypoint x="240" y="582" />
+        <di:waypoint x="570" y="420" />
+        <di:waypoint x="570" y="842" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="381" y="360" width="79" height="14" />
+          <dc:Bounds x="540" y="591" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_SolicitacaoAtendimento_di" bpmnElement="Flow_SolicitacaoAtendimento">
-        <di:waypoint x="800" y="90" />
-        <di:waypoint x="1010" y="90" />
-        <di:waypoint x="1010" y="270" />
-        <di:waypoint x="840" y="340" />
-        <di:waypoint x="690" y="360" />
-        <di:waypoint x="605" y="411" />
+        <di:waypoint x="980" y="210" />
+        <di:waypoint x="980" y="582" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="955" y="292" width="61" height="27" />
+          <dc:Bounds x="989" y="281" width="61" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_SolicitacaoFinanceiro_di" bpmnElement="Flow_SolicitacaoFinanceiro">
-        <di:waypoint x="765" y="190" />
-        <di:waypoint x="740" y="290" />
-        <di:waypoint x="550" y="320" />
-        <di:waypoint x="550" y="510" />
-        <di:waypoint x="572" y="510" />
+        <di:waypoint x="890" y="382" />
+        <di:waypoint x="890" y="872" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="638" y="283" width="79" height="14" />
+          <dc:Bounds x="900" y="773" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_SolicitacaoRelatorios_di" bpmnElement="Flow_SolicitacaoRelatorios">
-        <di:waypoint x="860" y="290" />
-        <di:waypoint x="860" y="340" />
-        <di:waypoint x="530" y="340" />
-        <di:waypoint x="530" y="600" />
-        <di:waypoint x="572" y="600" />
+        <di:waypoint x="1250" y="480" />
+        <di:waypoint x="1250" y="762" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="654" y="330" width="82" height="14" />
+          <dc:Bounds x="1212" y="650" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
