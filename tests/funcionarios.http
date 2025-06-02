@@ -1,0 +1,101 @@
+@api_base_url = http://localhost:3000/funcionarios
+
+# IDs para teste - serão atualizados após a criação
+@funcionarioId_criado = 1
+### Criar um novo Funcionário
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nomeCompleto": "Carlos Alberto Silva",
+  "dataNascimento": "1985-03-15",
+  "cpf": "11122233344",
+  "rg": "1234567-8",
+  "genero": "Masculino",
+  "endereco": "Rua das Palmeiras",
+  "numero": "100",
+  "bairro": "Centro",
+  "cidade": "Cidade Exemplo",
+  "estado": "SP",
+  "cep": "12345-000",
+  "telefoneCelular": "11987654321",
+  "email": "teste.funcionario@email.com",
+  "cargo": "Recepcionista Chefe",
+  "dataAdmissao": "2023-01-10",
+  "salario": 3500.00,
+  "status": "Ativo",
+  "observacoes": "Funcionário exemplar."
+}
+
+### Criar outro Funcionário (para testes de listagem e deleção)
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "nomeCompleto": "Ana Beatriz Costa",
+  "dataNascimento": "1990-07-22",
+  "cpf": "99988877766",
+  "rg": "8765432-1",
+  "genero": "Feminino",
+  "endereco": "Avenida Principal",
+  "numero": "250",
+  "bairro": "Jardins",
+  "cidade": "Cidade Exemplo",
+  "estado": "SP",
+  "cep": "12345-010",
+  "telefoneCelular": "11912345678",
+  "email": "ana.beatriz@email.com",
+  "cargo": "Analista Financeiro",
+  "dataAdmissao": "2022-05-20",
+  "salario": 4200.00,
+  "status": "Ativo"
+}
+
+### Listar todos os Funcionários
+GET {{api_base_url}}/
+
+### Listar Funcionários com filtros
+### Por nome
+GET {{api_base_url}}/?nome=Carlos
+
+### Por cargo
+GET {{api_base_url}}/?cargo=Recepcionista
+
+### Por status
+GET {{api_base_url}}/?status=Ativo
+
+### Por CPF
+GET {{api_base_url}}/?cpf=11122233344
+
+
+### Obter detalhes de um Funcionário específico
+GET {{api_base_url}}/{{funcionarioId_criado}}
+
+
+### Atualizar um Funcionário existente
+PUT {{api_base_url}}/{{funcionarioId_criado}}
+Content-Type: application/json
+
+{
+  "cargo": "Gerente de Recepção",
+  "salario": 3800.00,
+  "observacoes": "Promovido a Gerente de Recepção."
+}
+
+### Tentar atualizar com CPF/Email duplicado (deve falhar se o ID for diferente)
+PUT {{api_base_url}}/{{funcionarioId_criado}} 
+Content-Type: application/json
+{
+  "email": "ana.beatriz@email.com" 
+}
+
+
+### Deletar um Funcionário
+# Use o ID de um funcionário que pode ser deletado (ex: o segundo criado, Ana Beatriz)
+# Se o funcionário estiver referenciado em 'funcionarioCriadorId', a deleção falhará
+# (a menos que a FK seja SET NULL e não haja outras restrições).
+# Para testar a deleção, crie um funcionário que não será usado como criador.
+# Supondo que o ID 2 é da Ana Beatriz e ela não criou nada ainda.
+DELETE {{api_base_url}}/2 
+
+

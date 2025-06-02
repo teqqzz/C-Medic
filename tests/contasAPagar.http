@@ -1,0 +1,95 @@
+@api_base_url = http://localhost:3000/contas-pagar
+@funcionarioId_existente = 1
+@fornecedorId_existente = 1  
+@categoriaId_existente = 1 
+@contaPagarId_criada = 1
+
+### Pré-requisitos:
+# 1. Criar um Fornecedor (use fornecedores.http). Anote o ID em @fornecedorId_existente.
+# 2. Criar uma Categoria de Despesa (use categoriasDespesa.http). Anote o ID em @categoriaId_existente.
+
+### Criar nova Conta a Pagar
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "descricao": "Pagamento de Aluguel - Mês Julho/2025",
+  "fornecedorId": 1,
+  "categoriaDespesaId": 1,
+  "valorTotal": 1500.75,
+  "dataEmissao": "2025-07-01",
+  "dataVencimento": "2025-07-10",
+  "numeroDocumento": "ALUGUEL-072025",
+  "status": "Pendente",
+  "recorrente": true,
+   "funcionarioIdCriador": 1
+}
+
+### Criar outra Conta a Pagar (para fornecedor diferente)
+# Supondo @fornecedorId_outro = 2 e @categoriaId_outra = 2
+POST {{api_base_url}}/
+Content-Type: application/json
+
+{
+  "descricao": "Compra de Material de Escritório",
+  "fornecedorId": 2,
+  "categoriaDespesaId": 2,
+  "valorTotal": 250.50,
+  "dataEmissao": "2025-07-05",
+  "dataVencimento": "2025-07-20",
+  "numeroDocumento": "NF-00123",
+  "status": "Pendente"
+}
+
+
+### Listar todas as Contas a Pagar (com detalhes de fornecedor/categoria)
+GET {{api_base_url}}/?incluirDetalhes=true
+
+### Listar Contas a Pagar com filtros
+# Por status Pendente
+GET {{api_base_url}}/?status=Pendente&incluirDetalhes=true
+
+# Por Fornecedor
+GET {{api_base_url}}/?fornecedorId={{fornecedorId_existente}}&incluirDetalhes=true
+
+# Por Categoria
+GET {{api_base_url}}/?categoriaDespesaId={{categoriaId_existente}}&incluirDetalhes=true
+
+# Por período de vencimento
+GET {{api_base_url}}/?dataVencimentoInicio=2025-07-01&dataVencimentoFim=2025-07-15&incluirDetalhes=true
+
+
+### Obter detalhes de uma Conta a Pagar específica
+# Atualize @contaPagarId_criada com o ID da primeira conta criada
+GET {{api_base_url}}/{{contaPagarId_criada}}
+
+
+### Atualizar uma Conta a Pagar (Registrar Pagamento)
+# Atualize @contaPagarId_criada
+PUT {{api_base_url}}/{{contaPagarId_criada}}
+Content-Type: application/json
+
+{
+  "status": "Paga",
+  "valorPago": 1500.75,
+  "dataPagamento": "2025-07-08",
+  "observacoes": "Pagamento efetuado via transferência bancária."
+}
+
+### Atualizar uma Conta a Pagar (Alterar descrição e data de vencimento)
+# Supondo que a conta com ID 2 (Material de Escritório) ainda está pendente
+PUT {{api_base_url}}/2
+Content-Type: application/json
+
+{
+  "descricao": "Compra de Material de Escritório e Limpeza",
+  "dataVencimento": "2025-07-25",
+  "observacoes": "Vencimento prorrogado."
+}
+
+### Cancelar uma Conta a Pagar
+# Supondo que a conta com ID 2 ainda não foi paga
+PATCH {{api_base_url}}/2/cancelar
+
+
+

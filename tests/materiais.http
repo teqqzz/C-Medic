@@ -1,0 +1,55 @@
+@api_base_url = http://localhost:3000/materiais
+@funcionarioId_existente = 1
+@fornecedorId_existente = 1
+@materialId_criado = 1
+@materialId_baixo_estoque = 0 
+@materialId_vencendo = 0
+
+### Criar novo material COM fornecedorId
+POST {{api_base_url}}/criarmaterial
+Content-Type: application/json
+
+{
+  "descricao": "Seringa Descartável 10ml",
+  "tipo": "Hospitalar",
+  "codigo": "SER10ML-XYZ",
+  "valor": 1.50,
+  "quantidade": 500,
+  "vencimento": "2027-12-31",
+  "unidadeMedida": "un",
+  "pontoPedido": 50,
+  "fornecedorId": {{fornecedorId_existente}}
+}
+
+### Listar todos os materiais
+GET {{api_base_url}}/listarmaterial
+
+### Obter um material específico (atualize @materialId_criado com um ID válido)
+GET {{api_base_url}}/listarmaterial/{{materialId_criado}}
+
+### Atualizar um material existente (atualize @materialId_criado)
+PUT {{api_base_url}}/atualizarmaterial/{{materialId_criado}}
+Content-Type: application/json
+{
+  "quantidade": 480,
+  "pontoPedido": 60
+}
+
+
+# --- Novos Testes para Relatórios de Estoque ---
+
+### Relatório: Listar Materiais com Baixo Estoque
+GET {{api_base_url}}/relatorios/baixo-estoque
+
+
+### Relatório: Listar Materiais Próximos ao Vencimento (default: 60 dias, não inclui vencidos)
+GET {{api_base_url}}/relatorios/proximo-vencimento
+
+### Relatório: Listar Materiais Próximos ao Vencimento (30 dias, não inclui vencidos)
+GET {{api_base_url}}/relatorios/proximo-vencimento?diasAntecedencia=30
+
+### Relatório: Listar Materiais Próximos ao Vencimento (90 dias, INCLUINDO vencidos)
+GET {{api_base_url}}/relatorios/proximo-vencimento?diasAntecedencia=90&incluirVencidos=true
+
+### Deletar um material (exemplo)
+# DELETE {{api_base_url}}/deletarmaterial/XYZ

@@ -1,0 +1,66 @@
+### Criar um novo Atendimento 
+POST http://localhost:3000/atendimentos/
+Content-Type: application/json
+{
+  "agendamentoId": 1,
+  "materialId": 1,
+  "descricaoAtendimento": "Paciente apresentou sintomas de gripe. Realizado exame de sangue.",
+  "criadoPor": "Dra. Ana Silva"
+}
+
+### Criar um novo Atendimento (sem material específico)
+POST http://localhost:3000/atendimentos/
+Content-Type: application/json
+
+{
+  "agendamentoId": 3, 
+  "materialId": null, 
+  "descricaoAtendimento": "Consulta de rotina.",
+  "criadoPor": "Dr. Carlos"
+}
+
+
+### Listar todos os Atendimentos
+GET http://localhost:3000/atendimentos/
+
+### Listar Atendimentos com filtros
+GET http://localhost:3000/atendimentos/?pacienteId=1
+
+# Por data
+GET http://localhost:3000/atendimentos/?dataInicio=2025-07-01&dataFim=2025-07-31
+
+# Por status de pagamento
+GET http://localhost:3000/atendimentos/?statusPagamento=Pendente
+
+# Combinado
+GET http://localhost:3000/atendimentos/?pacienteId=1&statusPagamento=Pendente
+
+
+### Obter detalhes de um Atendimento específico
+GET http://localhost:3000/atendimentos/1
+
+
+### Atualizar Status de Pagamento de um Atendimento para "Pago"
+PUT http://localhost:3000/atendimentos/1/pagamento
+Content-Type: application/json
+
+{
+  "statusPagamento": "Pago"
+}
+
+### Atualizar Status de Pagamento de um Atendimento para "Cancelado"
+PUT http://localhost:3000/atendimentos/2/pagamento
+Content-Type: application/json
+
+{
+  "statusPagamento": "Cancelado"
+}
+
+### Atualizar Status de Pagamento de um Atendimento para "Pendente"
+PUT http://localhost:3000/atendimentos/3/pagamento
+Content-Type: application/json
+
+{
+  "statusPagamento": "Pendente"
+}
+

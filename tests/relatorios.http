@@ -1,0 +1,58 @@
+@api_base_url = http://localhost:3000/relatorios
+@data_inicio_teste = 2025-01-01
+@data_fim_teste = 2025-12-31
+@data_referencia_teste = 2025-07-26 
+
+@paciente_id_teste = 1
+@exame_id_teste = 1
+@fornecedor_id_teste = 1
+@categoria_despesa_id_teste = 1
+
+
+### Relatório de Fluxo de Caixa
+GET {{api_base_url}}/fluxo-caixa?dataInicio={{data_inicio_teste}}&dataFim={{data_fim_teste}}
+
+### Relatório de Contas a Receber (Aging)
+# Todos em aberto para a data de referência
+GET {{api_base_url}}/contas-a-receber?dataReferencia={{data_referencia_teste}}&status=EmAberto
+
+### Pendentes para um paciente específico
+GET {{api_base_url}}/contas-a-receber?dataReferencia={{data_referencia_teste}}&pacienteId={{paciente_id_teste}}&status=Pendente
+
+### Todas as contas (não canceladas) para a data de referência
+GET {{api_base_url}}/contas-a-receber?dataReferencia={{data_referencia_teste}}
+
+
+### Relatório de Contas a Pagar (Aging)
+# Todas em aberto para a data de referência
+GET {{api_base_url}}/contas-a-pagar?dataReferencia={{data_referencia_teste}}&status=EmAberto
+
+# Pendentes para um fornecedor específico
+GET {{api_base_url}}/contas-a-pagar?dataReferencia={{data_referencia_teste}}&fornecedorId={{fornecedor_id_teste}}&status=Pendente
+
+# Todas as contas (não canceladas/pagas) para uma categoria de despesa
+GET {{api_base_url}}/contas-a-pagar?dataReferencia={{data_referencia_teste}}&categoriaDespesaId={{categoria_despesa_id_teste}}
+
+
+### Relatório DRE Simplificado
+GET {{api_base_url}}/dre?dataInicio={{data_inicio_teste}}&dataFim={{data_fim_teste}}
+
+
+### Relatório de Faturamento por Exame/Serviço
+### Geral no período
+GET {{api_base_url}}/faturamento-exames?dataInicio={{data_inicio_teste}}&dataFim={{data_fim_teste}}
+
+### Para um exame específico
+GET {{api_base_url}}/faturamento-exames?dataInicio={{data_inicio_teste}}&dataFim={{data_fim_teste}}&exameId={{exame_id_teste}}
+
+
+### Relatório de Despesas por Categoria
+# Geral no período
+GET {{api_base_url}}/despesas-categoria?dataInicio={{data_inicio_teste}}&dataFim={{data_fim_teste}}
+
+### Para uma categoria específica
+GET {{api_base_url}}/despesas-categoria?dataInicio={{data_inicio_teste}}&dataFim={{data_fim_teste}}&categoriaId={{categoria_despesa_id_teste}}
+
+### Para uma categoria e fornecedor específicos
+GET {{api_base_url}}/despesas-categoria?dataInicio={{data_inicio_teste}}&dataFim={{data_fim_teste}}&categoriaId={{categoria_despesa_id_teste}}&fornecedorId={{fornecedor_id_teste}}
+

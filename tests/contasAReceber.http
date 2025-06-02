@@ -1,0 +1,53 @@
+@api_base_url_contas = http://localhost:3000/contas-receber
+@api_base_url_atendimentos = http://localhost:3000/atendimentos
+
+# IDs para teste - Substitua pelos IDs reais do seu banco após criar dados
+@pacienteId_existente = 1
+@agendamentoId_marcado_para_atendimento = 5 
+@materialId_para_atendimento = 1
+@atendimentoId_gerado = 1 
+@contaReceberId_gerada = 1 
+
+### Listar todas as Contas a Receber
+GET {{api_base_url_contas}}/
+
+### Listar Contas a Receber com filtros
+# Por pacienteId
+GET {{api_base_url_contas}}/?pacienteId={{pacienteId_existente}}
+
+# Por data de vencimento
+GET {{api_base_url_contas}}/?dataVencimentoInicio=2025-01-01&dataVencimentoFim=2025-12-31
+
+# Por status
+GET {{api_base_url_contas}}/?status=Pendente
+# Outros status: Pago, Vencido, Cancelado
+
+# Combinado
+GET {{api_base_url_contas}}/?pacienteId={{pacienteId_existente}}&status=Pendente
+
+
+### Obter detalhes de uma Conta a Receber específica
+# Use o @contaReceberId_gerada após criar um atendimento
+GET {{api_base_url_contas}}/{{contaReceberId_gerada}}
+
+
+### Registrar Pagamento de uma Conta a Receber
+PATCH {{api_base_url_contas}}/{{contaReceberId_gerada}}/registrar-pagamento
+Content-Type: application/json
+
+{
+  "dataPagamento": "2025-07-25", 
+  "valorPago": 150.75 
+}
+
+### Cancelar uma Conta a Receber
+PATCH {{api_base_url_contas}}/2/cancelar # Supondo ID 2 para teste de cancelamento
+
+### Atualizar Data de Vencimento de uma Conta a Receber
+PATCH {{api_base_url_contas}}/{{contaReceberId_gerada}}/atualizar-vencimento
+Content-Type: application/json
+
+{
+  "novaDataVencimento": "2025-08-30"
+}
+

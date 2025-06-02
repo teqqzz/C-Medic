@@ -1,0 +1,52 @@
+@api_base_url = http://localhost:3000/pacientes
+
+@pacienteId_criado = 1
+
+### Criar novo paciente
+POST {{api_base_url}}/criarpaciente
+Content-Type: application/json
+
+{
+  "nome": "Ana Clara Souza",
+  "datanascimento": "1995-08-22",
+  "email": "anaclara.souza@emailteste.com",
+  "cpf": "111.222.333-01",
+  "endereco": "Rua das Flores, 123, Bairro Primavera",
+  "criadoPor": "Legado" ,
+  "funcionarioIdLogado": 1
+}
+
+### Criar outro paciente (para testes de listagem/deleção)
+POST {{api_base_url}}/criarpaciente
+Content-Type: application/json
+
+{
+  "nome": "Bruno Alves Pereira",
+  "datanascimento": "1988-03-10",
+  "email": "bruno.alves@emailteste.com",
+  "cpf": "444.555.666-02",
+  "endereco": "Avenida Central, 789, Centro"
+}
+# Após criar, pegue o ID e atualize @pacienteId_criado se necessário para outros testes
+
+
+### Listar todos os pacientes
+GET {{api_base_url}}/listarpaciente
+
+
+### Atualizar um paciente existente
+PUT {{api_base_url}}/atualizarpaciente/{{pacienteId_criado}}
+Content-Type: application/json
+
+{
+  "nome": "Ana Clara Souza Oliveira",
+  "email": "ana.oliveira@emailteste.com",
+  "endereco": "Rua das Flores, 123, Bairro Primavera, Apto 101"
+}
+
+
+
+
+### Deletar um paciente
+# Use o ID do Bruno Alves (supondo que seja 2, ou o ID retornado na criação dele)
+DELETE {{api_base_url}}/deletarpaciente/2
